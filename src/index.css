@@ -1,0 +1,39 @@
+@import "tailwindcss";
+@import "@coursera/cds-tailwind";
+@import "./components/my-learning/openai-theme.css";
+
+@source "../src/**/*.{ts,tsx,html}";
+@source "../index.html";
+
+body {
+  font-family: "Source Sans 3", "Source Sans Pro", Arial, sans-serif;
+  color: var(--cds-color-neutral-primary);
+  background-color: var(--cds-color-neutral-background-primary);
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.material-symbols-rounded {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Filled glyph (e.g. star) — opt-in; default remains outline per CDS */
+.material-symbols-rounded.material-symbols-fill {
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Today's goals list star + circle — Figma spec */
+.hero-goals-star-circle {
+  background-color: #f2f5fa;
+}
+
+.hero-goals-star-icon {
+  color: #c1cad9;
+}
+
+/* ProgressBanner: path title stays 30px/600 at all breakpoints (overrides cds-title-sm shrink below lg) */
+h1.progress-banner-path-heading {
+  font-size: 30px;
+  line-height: 36px;
+}
