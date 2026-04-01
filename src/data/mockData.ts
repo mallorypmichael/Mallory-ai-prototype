@@ -181,7 +181,7 @@ export const openAIEnrollments: OpenAIEnrollment[] = [
         id: "m2-1", title: "Getting Started",
         items: [
           { id: "i2-1", title: "Intro", type: "Video", completed: true },
-          { id: "i2-2", title: "Reading title", type: "Reading", completed: false },
+          { id: "i2-2", title: "How this course is structured", type: "Reading", completed: false },
           { id: "i2-3", title: "What to expect from this course", type: "Reading", completed: false },
           { id: "i2-4", title: "Goals", type: "Reading", completed: false },
           { id: "i2-5", title: "Test Your Knowledge", type: "Graded Assessment", completed: false },
@@ -226,7 +226,7 @@ export const openAIEnrollments: OpenAIEnrollment[] = [
     ],
     currentModuleId: "m2-1",
     currentItemId: "i2-2",
-    currentItemTitle: "Reading title",
+    currentItemTitle: "How this course is structured",
     lastAccessedAt: "2026-03-27T08:30:00Z",
     learningOutcomes: [
       "Build end-to-end AI workflows using prompt chaining and API integration",

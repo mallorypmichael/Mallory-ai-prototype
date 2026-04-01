@@ -106,7 +106,7 @@ function CourseNav({ enrollments, selected, viewMode, onSelect, onClose, onMyLea
               background: "var(--oai-bg)",
               border: "1px solid var(--oai-border)",
               borderRadius: "var(--oai-radius-md)",
-              boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+              boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
               zIndex: 10,
               overflow: "hidden",
             }}
@@ -134,7 +134,7 @@ function CourseNav({ enrollments, selected, viewMode, onSelect, onClose, onMyLea
           className="course-nav-item"
           data-active={viewMode === "overview"}
           onClick={onMyLearning}
-          style={{ fontWeight: viewMode === "overview" ? 600 : 400 }}
+          style={{ fontWeight: viewMode === "overview" ? 500 : 400 }}
         >
           <span className="material-symbols-rounded" style={{ fontSize: 16, opacity: 0.6 }}>
             grid_view
@@ -191,13 +191,13 @@ function CourseNav({ enrollments, selected, viewMode, onSelect, onClose, onMyLea
 
 function DailyGoals({ goals }: { goals: OpenAIDailyGoal[] }) {
   return (
-    <div className="oai-card" style={{ padding: "20px 24px" }}>
-      <h3 className="oai-heading-sm" style={{ marginBottom: 16 }}>Daily goals</h3>
-      <ul className="flex flex-col" style={{ gap: 12, listStyle: "none", margin: 0, padding: 0 }}>
+    <div className="oai-card" style={{ padding: "24px 28px" }}>
+      <h3 className="oai-heading-sm" style={{ marginBottom: 20 }}>Daily goals</h3>
+      <ul className="flex flex-col" style={{ gap: 14, listStyle: "none", margin: 0, padding: 0 }}>
         {goals.map((g) => {
           const done = g.current >= g.target;
           return (
-            <li key={g.id} className="flex items-center" style={{ gap: 12 }}>
+            <li key={g.id} className="flex items-center" style={{ gap: 14 }}>
               <span className="oai-goal-check material-symbols-rounded" data-done={done} style={{ fontSize: 14 }}>
                 {done ? "check" : ""}
               </span>
@@ -220,9 +220,9 @@ function DailyGoals({ goals }: { goals: OpenAIDailyGoal[] }) {
 
 function OaiSkillProgress({ skills }: { skills: OpenAISkill[] }) {
   return (
-    <div className="oai-card" style={{ padding: "20px 24px", flex: 1, minWidth: 0 }}>
-      <h3 className="oai-heading-sm" style={{ marginBottom: 16 }}>Skills</h3>
-      <div className="flex flex-col" style={{ gap: 14 }}>
+    <div className="oai-card" style={{ padding: "24px 28px", flex: 1, minWidth: 0 }}>
+      <h3 className="oai-heading-sm" style={{ marginBottom: 20 }}>Skills</h3>
+      <div className="flex flex-col" style={{ gap: 16 }}>
         {skills.map((s) => {
           const pct = s.total > 0 ? Math.min(100, Math.round((s.current / s.total) * 100)) : 0;
           const complete = s.current >= s.total;
@@ -257,15 +257,15 @@ function OaiSkillProgress({ skills }: { skills: OpenAISkill[] }) {
 
 function OaiWeeklyActivityCard({ activity }: { activity: OpenAIWeeklyActivity }) {
   return (
-    <div className="oai-card" style={{ padding: "20px 24px" }}>
-      <div className="flex items-center" style={{ gap: 10, marginBottom: 12 }}>
+    <div className="oai-card" style={{ padding: "24px 28px" }}>
+      <div className="flex items-center" style={{ gap: 12, marginBottom: 16 }}>
         <h3 className="oai-heading-sm">Weekly activity</h3>
         <span className="oai-streak-chip">
-          <span className="material-symbols-rounded" style={{ fontSize: 12 }}>local_fire_department</span>
+          <span className="material-symbols-rounded" style={{ fontSize: 12 }}>calendar_month</span>
           {activity.streakDays} day streak
         </span>
       </div>
-      <div className="flex" style={{ gap: 6, marginBottom: 16 }}>
+      <div className="flex" style={{ gap: 8, marginBottom: 20 }}>
         {activity.days.map((d) => (
           <div key={d.label} className="oai-weekly-day" data-state={d.state}>
             {d.state === "done" ? (
@@ -301,8 +301,8 @@ function CertificateCard({ cert, onClick }: { cert: OpenAICertificate; onClick?:
       }}
     >
       <div className="oai-certificate-card-top">
-        <span style={{ fontSize: 15, fontWeight: 600 }}>ChatGPT</span>
-        <span style={{ fontSize: 15, fontWeight: 700, textAlign: "right", lineHeight: "20px" }}>
+        <span style={{ fontSize: 15, fontWeight: 500 }}>ChatGPT</span>
+        <span style={{ fontSize: 15, fontWeight: 500, textAlign: "right", lineHeight: "20px" }}>
           {line1}<br />{line2}
         </span>
       </div>
@@ -311,7 +311,7 @@ function CertificateCard({ cert, onClick }: { cert: OpenAICertificate; onClick?:
         <ChatGPTLogo size={72} />
       </div>
 
-      <span style={{ fontSize: 15, fontWeight: 600, textAlign: "left" }}>OpenAI</span>
+      <span style={{ fontSize: 15, fontWeight: 500, textAlign: "left" }}>OpenAI</span>
     </button>
   );
 }
@@ -362,9 +362,9 @@ function ItemPanel({
       {/* Top bar */}
       <div
         className="flex items-center justify-between"
-        style={{ padding: "12px 24px", flexShrink: 0 }}
+        style={{ padding: "14px 28px", flexShrink: 0 }}
       >
-        <div className="flex items-center" style={{ gap: 8 }}>
+        <div className="flex items-center" style={{ gap: 10 }}>
           <button className="chatgpt-sidebar-btn" aria-label="Copy">
             <span className="material-symbols-rounded" style={{ fontSize: 18 }}>content_copy</span>
           </button>
@@ -372,7 +372,7 @@ function ItemPanel({
             <span className="material-symbols-rounded" style={{ fontSize: 18 }}>settings</span>
           </button>
         </div>
-        <div className="flex items-center" style={{ gap: 8 }}>
+        <div className="flex items-center" style={{ gap: 10 }}>
           <button onClick={onBack} className="oai-coursera-btn">
             <svg viewBox="0 0 1155 164" width="80" height="11" fill="currentColor" aria-hidden>
               <path d={COURSERA_SVG_PATH} fillRule="nonzero" />
@@ -386,7 +386,7 @@ function ItemPanel({
       </div>
 
       {/* Scrollable content with prev/next arrows */}
-      <main className="flex-1 overflow-y-auto relative" style={{ padding: "0 40px 32px" }}>
+      <main className="flex-1 overflow-y-auto relative" style={{ padding: "0 48px 40px" }}>
         {/* Prev arrow */}
         {hasPrev && (
           <button
@@ -410,8 +410,8 @@ function ItemPanel({
           </button>
         )}
 
-        <div className="flex flex-col" style={{ maxWidth: 720, gap: 24 }}>
-          <h1 style={{ fontSize: 28, fontWeight: 700, lineHeight: "36px", margin: 0 }}>
+        <div className="flex flex-col" style={{ maxWidth: 720, gap: 28 }}>
+          <h1 style={{ fontSize: 28, fontWeight: 500, lineHeight: "36px", margin: 0 }}>
             {item.title}
           </h1>
           <p className="oai-body" style={{ color: "var(--oai-text-secondary)", margin: 0 }}>
@@ -431,7 +431,7 @@ function ItemPanel({
       </main>
 
       {/* Bottom input */}
-      <div style={{ padding: "0 24px 12px", flexShrink: 0 }}>
+      <div style={{ padding: "0 28px 14px", flexShrink: 0 }}>
         <div className="chatgpt-input-bar" style={{ maxWidth: 720 }}>
           <button className="chatgpt-input-icon" aria-label="Attach">
             <span className="material-symbols-rounded" style={{ fontSize: 20 }}>add</span>
@@ -470,14 +470,14 @@ function XdpPanel({
       {/* Top bar */}
       <div
         className="flex items-center justify-between"
-        style={{ padding: "12px 24px", flexShrink: 0 }}
+        style={{ padding: "14px 28px", flexShrink: 0 }}
       >
-        <div className="flex items-center" style={{ gap: 8 }}>
+        <div className="flex items-center" style={{ gap: 10 }}>
           <button className="chatgpt-sidebar-btn" aria-label="Settings">
             <span className="material-symbols-rounded" style={{ fontSize: 18 }}>settings</span>
           </button>
         </div>
-        <div className="flex items-center" style={{ gap: 8 }}>
+        <div className="flex items-center" style={{ gap: 10 }}>
           <button onClick={onBack} className="oai-coursera-btn">
             <svg viewBox="0 0 1155 164" width="80" height="11" fill="currentColor" aria-hidden>
               <path d={COURSERA_SVG_PATH} fillRule="nonzero" />
@@ -491,11 +491,11 @@ function XdpPanel({
       </div>
 
       {/* Scrollable content */}
-      <main className="flex-1 overflow-y-auto" style={{ padding: "0 40px 32px" }}>
-        <div className="flex flex-col" style={{ maxWidth: 960, gap: 32 }}>
+      <main className="flex-1 overflow-y-auto" style={{ padding: "0 48px 40px" }}>
+        <div className="flex flex-col" style={{ maxWidth: 960, gap: 40 }}>
 
           {/* Hero + Module list side-by-side */}
-          <div style={{ display: "flex", gap: 24, alignItems: "flex-start" }}>
+          <div style={{ display: "flex", gap: 28, alignItems: "flex-start" }}>
             {/* Hero */}
             <div
               className="oai-xdp-hero"
@@ -505,14 +505,14 @@ function XdpPanel({
                 ...(enrollment.brandSurfaceTint ? { background: enrollment.brandSurfaceTint } : {}),
               }}
             >
-              <span style={{ fontSize: 22, fontWeight: 700, lineHeight: "28px" }}>OpenAI</span>
-              <h1 style={{ fontSize: 32, fontWeight: 700, lineHeight: "40px", margin: 0, marginTop: 8 }}>
+              <span style={{ fontSize: 22, fontWeight: 500, lineHeight: "28px" }}>OpenAI</span>
+              <h1 style={{ fontSize: 32, fontWeight: 500, lineHeight: "40px", margin: 0, marginTop: 8 }}>
                 {enrollment.title}
               </h1>
               <span className="oai-body" style={{ color: "var(--oai-text-secondary)" }}>
                 {enrollment.level} &middot; {enrollment.estimatedHours} hours
               </span>
-              <div className="flex items-center" style={{ gap: 12, marginTop: 8 }}>
+              <div className="flex items-center" style={{ gap: 14, marginTop: 8 }}>
                 <button
                   className="oai-btn-primary"
                   style={{ alignSelf: "flex-start", opacity: locked ? 0.6 : 1 }}
@@ -540,7 +540,7 @@ function XdpPanel({
 
             {/* Module list card */}
             <div className="oai-xdp-modules-card">
-              <h3 className="oai-heading-sm" style={{ marginBottom: 16 }}>
+              <h3 className="oai-heading-sm" style={{ marginBottom: 20 }}>
                 {enrollment.modules.length} modules in this course
               </h3>
               {enrollment.modules.map((mod, mi) => (
@@ -557,7 +557,7 @@ function XdpPanel({
           {/* What you'll learn */}
           {enrollment.learningOutcomes.length > 0 && (
             <div>
-              <h2 className="oai-heading-sm" style={{ marginBottom: 16 }}>What you'll learn</h2>
+              <h2 className="oai-heading-sm" style={{ marginBottom: 20 }}>What you'll learn</h2>
               <div className="oai-xdp-outcomes-grid">
                 {enrollment.learningOutcomes.map((outcome, i) => (
                   <div key={i} className="oai-xdp-outcome">
@@ -586,7 +586,7 @@ function XdpPanel({
       </main>
 
       {/* Bottom input */}
-      <div style={{ padding: "0 24px 12px", flexShrink: 0 }}>
+      <div style={{ padding: "0 28px 14px", flexShrink: 0 }}>
         <div className="chatgpt-input-bar" style={{ maxWidth: 960 }}>
           <button className="chatgpt-input-icon" aria-label="Attach">
             <span className="material-symbols-rounded" style={{ fontSize: 20 }}>add</span>
@@ -641,9 +641,9 @@ function MainPanel({
       {/* Top bar */}
       <div
         className="flex items-center justify-between"
-        style={{ padding: "12px 24px", flexShrink: 0 }}
+        style={{ padding: "14px 28px", flexShrink: 0 }}
       >
-        <div className="flex items-center" style={{ gap: 8 }}>
+        <div className="flex items-center" style={{ gap: 10 }}>
           <button className="chatgpt-sidebar-btn" aria-label="Copy">
             <span className="material-symbols-rounded" style={{ fontSize: 18 }}>content_copy</span>
           </button>
@@ -651,7 +651,7 @@ function MainPanel({
             <span className="material-symbols-rounded" style={{ fontSize: 18 }}>settings</span>
           </button>
         </div>
-        <div className="flex items-center" style={{ gap: 8 }}>
+        <div className="flex items-center" style={{ gap: 10 }}>
           <button onClick={onBack} className="oai-coursera-btn">
             <svg viewBox="0 0 1155 164" width="80" height="11" fill="currentColor" aria-hidden>
               <path d={COURSERA_SVG_PATH} fillRule="nonzero" />
@@ -665,12 +665,12 @@ function MainPanel({
       </div>
 
       {/* Scrollable content */}
-      <main className="flex-1 overflow-y-auto" style={{ padding: "0 40px 32px" }}>
-        <div className="flex flex-col" style={{ maxWidth: 960, gap: 32 }}>
+      <main className="flex-1 overflow-y-auto" style={{ padding: "0 48px 40px" }}>
+        <div className="flex flex-col" style={{ maxWidth: 960, gap: 40 }}>
           {/* Header */}
-          <div className="flex items-start" style={{ gap: 24 }}>
+          <div className="flex items-start" style={{ gap: 28 }}>
             <OaiProgressRing percent={enrollment.progressPercent} size={80} />
-            <div className="flex flex-col" style={{ gap: 8 }}>
+            <div className="flex flex-col" style={{ gap: 10 }}>
               <h1 className="oai-heading-lg" style={{ margin: 0 }}>{enrollment.title}</h1>
               <p className="oai-body" style={{ color: "var(--oai-text-secondary)", margin: 0 }}>
                 {enrollment.shortDescription}
@@ -680,8 +680,8 @@ function MainPanel({
 
           {/* Resume card */}
           {currentModule && enrollment.status !== "Complete" && (
-            <div className="oai-card flex items-center justify-between" style={{ padding: "16px 24px" }}>
-              <div className="flex flex-col" style={{ gap: 2 }}>
+            <div className="oai-card flex items-center justify-between" style={{ padding: "20px 28px" }}>
+              <div className="flex flex-col" style={{ gap: 4 }}>
                 <span className="oai-body-sm" style={{ color: "var(--oai-text-secondary)" }}>
                   Pick up where you left off
                 </span>
@@ -697,9 +697,9 @@ function MainPanel({
           )}
 
           {/* Skills | Daily Goals + Weekly Activity */}
-          <div style={{ display: "flex", gap: 24, alignItems: "flex-start" }}>
+          <div style={{ display: "flex", gap: 28, alignItems: "flex-start" }}>
             <OaiSkillProgress skills={skills} />
-            <div style={{ display: "flex", flexDirection: "column", gap: 24, flexShrink: 0 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 28, flexShrink: 0 }}>
               <DailyGoals goals={goals} />
               <OaiWeeklyActivityCard activity={weeklyActivity} />
             </div>
@@ -708,7 +708,7 @@ function MainPanel({
           {/* Certifications earned */}
           {certificates.length > 0 && (
             <div>
-              <h3 className="oai-heading-sm" style={{ marginBottom: 16 }}>Certifications earned</h3>
+              <h3 className="oai-heading-sm" style={{ marginBottom: 20 }}>Certifications earned</h3>
               <div className="oai-certificates-row">
                 {certificates.map((c) => {
                   const match = enrollments.find((e) => e.title === c.courseTitle);
@@ -727,7 +727,7 @@ function MainPanel({
       </main>
 
       {/* Bottom input */}
-      <div style={{ padding: "0 24px 12px", flexShrink: 0 }}>
+      <div style={{ padding: "0 28px 14px", flexShrink: 0 }}>
         <div className="chatgpt-input-bar" style={{ maxWidth: 960 }}>
           <button className="chatgpt-input-icon" aria-label="Attach">
             <span className="material-symbols-rounded" style={{ fontSize: 20 }}>add</span>

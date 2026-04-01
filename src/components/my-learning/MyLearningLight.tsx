@@ -18,7 +18,7 @@ function ProgressRing({ percent, size = 64 }: { percent: number; size?: number }
           strokeDasharray={c} strokeDashoffset={offset} strokeLinecap="round"
         />
       </svg>
-      <span className="absolute" style={{ fontSize: 16, fontWeight: 600, color: "var(--oai-accent)" }}>
+      <span className="absolute" style={{ fontSize: 16, fontWeight: 500, color: "var(--oai-accent)" }}>
         {percent}%
       </span>
     </div>
@@ -63,9 +63,19 @@ function ResumeHeroCard({ enrollment, onResume, onExpand }: ResumeHeroCardProps)
   const currentModule = enrollment.modules.find((m) => m.id === enrollment.currentModuleId);
 
   return (
-    <div className="oai-resume-hero" style={{ flexDirection: "row", alignItems: "flex-start", gap: 16 }}>
-      <div style={{ display: "flex", flexDirection: "column", gap: 20, flex: 1, minWidth: 0 }}>
-        <div className="oai-resume-hero-header">
+    <div className="oai-resume-hero" style={{ position: "relative" }}>
+      <button
+        type="button"
+        className="oai-enrollment-card-expand"
+        onClick={() => onExpand(enrollment.id)}
+        aria-label="Expand to full view"
+        style={{ position: "absolute", top: 28, right: 28, zIndex: 1 }}
+      >
+        <span className="material-symbols-rounded" style={{ fontSize: 16 }}>open_in_full</span>
+      </button>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 20, width: "100%", minWidth: 0 }}>
+        <div className="oai-resume-hero-header" style={{ paddingRight: 48 }}>
           <ProgressRing percent={enrollment.progressPercent} size={64} />
           <div className="oai-resume-hero-info">
             <span className="oai-heading-md">{enrollment.title}</span>
@@ -108,15 +118,6 @@ function ResumeHeroCard({ enrollment, onResume, onExpand }: ResumeHeroCardProps)
           </div>
         )}
       </div>
-
-      <button
-        className="oai-enrollment-card-expand"
-        onClick={() => onExpand(enrollment.id)}
-        aria-label="Expand to full view"
-        style={{ position: "static", flexShrink: 0 }}
-      >
-        <span className="material-symbols-rounded" style={{ fontSize: 16 }}>open_in_full</span>
-      </button>
     </div>
   );
 }
@@ -142,8 +143,10 @@ function CourseProgressStrip({ enrollments, onSelect }: CourseProgressStripProps
               />
             )}
             <button
+              type="button"
               className="oai-course-strip-item"
               data-state={state}
+              title={`${i + 1}. ${e.title}`}
               onClick={() => state !== "upcoming" && onSelect(e.id)}
             >
               <span className="oai-course-strip-icon" data-state={state}>
@@ -155,7 +158,7 @@ function CourseProgressStrip({ enrollments, onSelect }: CourseProgressStripProps
                   <span className="material-symbols-rounded" style={{ fontSize: 14 }}>lock</span>
                 )}
               </span>
-              <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+              <span className="oai-course-strip-label">
                 {i + 1}. {e.title}
               </span>
             </button>
@@ -181,7 +184,7 @@ export function MyLearningLight({ enrollments, onExpand, onResume, onViewDetails
   if (!currentCourse) return null;
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 12, width: "100%", alignItems: "stretch" }}>
       <ResumeHeroCard
         enrollment={currentCourse}
         onResume={onResume}
