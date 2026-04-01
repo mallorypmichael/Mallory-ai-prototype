@@ -220,7 +220,10 @@ function DailyGoals({ goals }: { goals: OpenAIDailyGoal[] }) {
 
 function OaiSkillProgress({ skills }: { skills: OpenAISkill[] }) {
   return (
-    <div className="oai-card" style={{ padding: "24px 28px", flex: 1, minWidth: 0 }}>
+    <div
+      className="oai-card"
+      style={{ padding: "24px 28px", flex: 1, minWidth: 0, minHeight: 0, alignSelf: "stretch" }}
+    >
       <h3 className="oai-heading-sm" style={{ marginTop: 0, marginBottom: 20 }}>Skills</h3>
       <div className="flex flex-col" style={{ gap: 16 }}>
         {skills.map((s) => {
@@ -699,7 +702,7 @@ function MainPanel({
           )}
 
           {/* Skills | Daily Goals + Weekly Activity */}
-          <div style={{ display: "flex", gap: 28, alignItems: "flex-start" }}>
+          <div style={{ display: "flex", gap: 28, alignItems: "stretch" }}>
             <OaiSkillProgress skills={skills} />
             <div
               style={{
