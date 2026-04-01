@@ -116,6 +116,8 @@ export interface OpenAIEnrollment {
   lastAccessedAt: string;
   learningOutcomes: string[];
   skillTags: string[];
+  /** Optional hero / certificate surface tint (e.g. ChatGPT Foundations). */
+  brandSurfaceTint?: string;
 }
 
 export const openAIEnrollments: OpenAIEnrollment[] = [
@@ -164,6 +166,7 @@ export const openAIEnrollments: OpenAIEnrollment[] = [
       "Keep your expertise front and center, review AI work critically while protecting privacy and maintaining your role as the expert",
     ],
     skillTags: ["Prompt Engineering", "Data Security", "Large Language Modeling", "Generative AI", "ChatGPT", "AI Personalization", "LLM Application", "Data Ethics", "Responsible AI"],
+    brandSurfaceTint: "#E6EFFF",
   },
   {
     id: "oai-2",
@@ -294,6 +297,7 @@ export interface OpenAICertificate {
   id: string;
   courseTitle: string;
   earnedAt: string;
+  cardBackground?: string;
 }
 
 export const openAICertificates: OpenAICertificate[] = openAIEnrollments
@@ -302,12 +306,13 @@ export const openAICertificates: OpenAICertificate[] = openAIEnrollments
     id: `cert-${e.id}`,
     courseTitle: e.title,
     earnedAt: e.lastAccessedAt,
+    ...(e.brandSurfaceTint ? { cardBackground: e.brandSurfaceTint } : {}),
   }));
 
 export const openAIDailyGoals: OpenAIDailyGoal[] = [
-  { id: "dg-1", label: "Complete 3 learning items", current: 1, target: 3 },
-  { id: "dg-2", label: "Finish a practice exercise", current: 0, target: 1 },
-  { id: "dg-3", label: "Spend 20 minutes learning", current: 8, target: 20 },
+  { id: "dg-1", label: "Complete 3 course items", current: 1, target: 3 },
+  { id: "dg-2", label: "Complete a knowledge check", current: 0, target: 1 },
+  { id: "dg-3", label: "Complete a module", current: 0, target: 1 },
 ];
 
 /* ───────────────────────────────────────────────

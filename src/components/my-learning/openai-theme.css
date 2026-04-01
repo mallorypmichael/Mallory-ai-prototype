@@ -1,90 +1,119 @@
 /*
  * OpenAI Certified — scoped theme
- * Simulates the ChatGPT visual language for the My Learning surfaces.
- * Scoped under .openai-shell so it coexists with CDS styling elsewhere.
+ * Uses official @openai/apps-sdk-ui design token values for ChatGPT-native
+ * color accuracy. Scoped under .openai-shell so it coexists with CDS styling.
+ *
+ * Primitive values sourced from @openai/apps-sdk-ui/css (variables-primitive.css)
  */
 
 .openai-shell {
-  --oai-bg: #ffffff;
-  --oai-bg-secondary: #f7f7f8;
-  --oai-bg-tertiary: #ececf1;
-  --oai-text-primary: #0d0d0d;
-  --oai-text-secondary: #6e6e80;
-  --oai-text-tertiary: #8e8ea0;
-  --oai-accent: #10a37f;
-  --oai-accent-hover: #0d8c6d;
-  --oai-accent-subtle: #d1fae5;
-  --oai-border: #e5e5e5;
-  --oai-border-light: #f0f0f0;
+  /* ── SDK primitive gray scale (light) ──────── */
+  --oai-gray-0: #ffffff;
+  --oai-gray-25: #fcfcfc;
+  --oai-gray-50: #f9f9f9;
+  --oai-gray-75: #f3f3f3;
+  --oai-gray-100: #ededed;
+  --oai-gray-150: #dfdfdf;
+  --oai-gray-200: #cdcdcd;
+  --oai-gray-300: #afafaf;
+  --oai-gray-400: #8f8f8f;
+  --oai-gray-500: #5d5d5d;
+  --oai-gray-600: #414141;
+  --oai-gray-700: #303030;
+  --oai-gray-800: #212121;
+  --oai-gray-900: #181818;
+  --oai-gray-1000: #0d0d0d;
+
+  /* ── SDK primitive green scale ─────────────── */
+  --oai-green-50: #d9f4e4;
+  --oai-green-400: #04b84c;
+  --oai-green-500: #00a240;
+  --oai-green-600: #008635;
+
+  /* ── SDK primitive red scale ───────────────── */
+  --oai-red-50: #ffd9d9;
+  --oai-red-400: #fa423e;
+
+  /* ── Semantic aliases (mapped to SDK primitives) */
+  --oai-bg: var(--oai-gray-0);
+  --oai-bg-secondary: var(--oai-gray-50);
+  --oai-bg-tertiary: var(--oai-gray-100);
+  --oai-text-primary: var(--oai-gray-1000);
+  --oai-text-secondary: var(--oai-gray-500);
+  --oai-text-tertiary: var(--oai-gray-400);
+  --oai-accent: var(--oai-green-400);
+  --oai-accent-hover: var(--oai-green-500);
+  --oai-accent-subtle: var(--oai-green-50);
+  --oai-border: var(--oai-gray-150);
+  --oai-border-light: var(--oai-gray-75);
   --oai-radius-sm: 8px;
   --oai-radius-md: 12px;
   --oai-radius-lg: 16px;
   --oai-radius-xl: 24px;
-  --oai-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --oai-font: ui-sans-serif, -apple-system, system-ui, "Segoe UI", "Noto Sans",
+    "Helvetica", "Arial", "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
 
   /* Card tints by status */
-  --oai-card-complete: #ffffff;
-  --oai-card-complete-border: #e5e5e5;
-  --oai-card-inprogress: #fce8e6;
+  --oai-card-complete: var(--oai-gray-0);
+  --oai-card-complete-border: var(--oai-gray-150);
+  --oai-card-inprogress: var(--oai-red-50);
   --oai-card-inprogress-border: #f5c6c0;
-  --oai-card-notstarted: #eef7f2;
+  --oai-card-notstarted: var(--oai-green-50);
   --oai-card-notstarted-border: #b9e3c8;
 
   /* Left nav */
   --oai-nav-width: 260px;
-  --oai-nav-bg: #f9f9f9;
-  --oai-nav-item-hover: #ececf1;
-  --oai-nav-item-active: #e8e8ed;
+  --oai-nav-bg: var(--oai-gray-50);
+  --oai-nav-item-hover: var(--oai-gray-100);
+  --oai-nav-item-active: var(--oai-gray-150);
 
   /* ChatGPT sidebar */
   --oai-sidebar-width: 48px;
-  --oai-sidebar-bg: #ffffff;
+  --oai-sidebar-bg: var(--oai-gray-0);
 
   font-family: var(--oai-font);
   color: var(--oai-text-primary);
 }
 
-/* ── Typography ──────────────────────────────── */
+/* ── Typography (aligned to SDK font scale) ──── */
 
 .oai-heading-lg {
-  font-size: 24px;
+  font-size: 1.5rem;    /* 24px — SDK heading-lg */
   font-weight: 600;
-  line-height: 32px;
-  letter-spacing: -0.01em;
+  line-height: 1.75rem; /* 28px */
 }
 
 .oai-heading-md {
-  font-size: 18px;
+  font-size: 1.125rem;  /* 18px — SDK heading-sm */
   font-weight: 600;
-  line-height: 24px;
+  line-height: 1.625rem; /* 26px */
 }
 
 .oai-heading-sm {
-  font-size: 15px;
+  font-size: 1rem;      /* 16px — SDK heading-xs */
   font-weight: 600;
-  line-height: 20px;
+  line-height: 1.5rem;  /* 24px */
 }
 
 .oai-body {
-  font-size: 14px;
+  font-size: 0.875rem;  /* 14px — SDK text-sm */
   font-weight: 400;
-  line-height: 20px;
+  line-height: 1.25rem; /* 20px */
 }
 
 .oai-body-sm {
-  font-size: 13px;
+  font-size: 0.75rem;   /* 12px — SDK text-xs */
   font-weight: 400;
-  line-height: 18px;
+  line-height: 1.125rem; /* 18px */
 }
 
 .oai-label {
-  font-size: 12px;
+  font-size: 0.75rem;   /* 12px — SDK text-xs */
   font-weight: 500;
-  line-height: 16px;
-  letter-spacing: 0.02em;
+  line-height: 1.125rem; /* 18px */
 }
 
-/* ── Buttons ─────────────────────────────────── */
+/* ── Buttons (SDK-aligned: pill shape, medium weight) ── */
 
 .oai-btn-primary {
   display: inline-flex;
@@ -92,18 +121,18 @@
   justify-content: center;
   gap: 6px;
   padding: 8px 16px;
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 20px;
-  color: #ffffff;
-  background: var(--oai-text-primary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+  color: var(--oai-gray-0);
+  background: var(--oai-gray-900);
   border: none;
   border-radius: 999px;
   cursor: pointer;
   transition: background 150ms ease;
 }
 .oai-btn-primary:hover {
-  background: #333;
+  background: var(--oai-gray-700);
 }
 
 .oai-btn-secondary {
@@ -112,13 +141,13 @@
   justify-content: center;
   gap: 6px;
   padding: 8px 16px;
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 500;
-  line-height: 20px;
+  line-height: 1.25rem;
   color: var(--oai-text-primary);
   background: var(--oai-bg);
   border: 1px solid var(--oai-border);
-  border-radius: var(--oai-radius-sm);
+  border-radius: 999px;
   cursor: pointer;
   transition: background 150ms ease;
 }
@@ -132,9 +161,9 @@
   justify-content: center;
   gap: 6px;
   padding: 6px 12px;
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 500;
-  line-height: 20px;
+  line-height: 1.25rem;
   color: var(--oai-text-secondary);
   background: transparent;
   border: none;
@@ -213,7 +242,7 @@
 .oai-goal-check[data-done="true"] {
   background: var(--oai-accent);
   border-color: var(--oai-accent);
-  color: #ffffff;
+  color: var(--oai-gray-0);
 }
 
 /* ── ChatGPT page chrome ─────────────────────── */
@@ -339,7 +368,7 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  color: #fff;
+  color: var(--oai-gray-0);
   font-size: 14px;
 }
 
@@ -546,11 +575,11 @@
 }
 .oai-course-strip-icon[data-state="complete"] {
   background: var(--oai-accent);
-  color: #fff;
+  color: var(--oai-gray-0);
 }
 .oai-course-strip-icon[data-state="current"] {
   background: var(--oai-text-primary);
-  color: #fff;
+  color: var(--oai-gray-0);
 }
 .oai-course-strip-icon[data-state="upcoming"] {
   background: var(--oai-bg-tertiary);
@@ -605,7 +634,7 @@
   height: 18px;
   border-radius: 50%;
   background: var(--oai-accent);
-  color: #fff;
+  color: var(--oai-gray-0);
   flex-shrink: 0;
 }
 
@@ -746,11 +775,11 @@
 
 .course-nav-item-icon[data-state="complete"] {
   background: var(--oai-accent);
-  color: #fff;
+  color: var(--oai-gray-0);
 }
 .course-nav-item-icon[data-state="current"] {
   background: var(--oai-text-primary);
-  color: #fff;
+  color: var(--oai-gray-0);
 }
 .course-nav-item-icon[data-state="upcoming"] {
   background: var(--oai-bg-tertiary);
@@ -771,7 +800,7 @@
   width: 220px;
   aspect-ratio: 3 / 4;
   padding: 20px;
-  background: #e8f0fe;
+  background: var(--oai-gray-75);
   border-radius: var(--oai-radius-lg);
   flex-shrink: 0;
   overflow: hidden;
@@ -788,7 +817,7 @@
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.7);
+  background: color-mix(in srgb, var(--oai-gray-0) 70%, transparent);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -860,4 +889,26 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0;
+}
+
+/* ── Coursera CTA button (inside ChatGPT shell) ── */
+
+.oai-coursera-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+  color: var(--oai-gray-0);
+  background: #0056d2;
+  border: none;
+  border-radius: var(--oai-radius-sm);
+  cursor: pointer;
+  font-family: var(--oai-font);
+  transition: opacity 150ms ease;
+}
+.oai-coursera-btn:hover {
+  opacity: 0.9;
 }

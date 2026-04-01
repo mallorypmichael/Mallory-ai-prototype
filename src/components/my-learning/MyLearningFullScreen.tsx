@@ -295,7 +295,11 @@ function CertificateCard({ cert, onClick }: { cert: OpenAICertificate; onClick?:
     <button
       className="oai-certificate-card"
       onClick={onClick}
-      style={{ cursor: onClick ? "pointer" : "default" }}>
+      style={{
+        cursor: onClick ? "pointer" : "default",
+        ...(cert.cardBackground ? { background: cert.cardBackground } : {}),
+      }}
+    >
       <div className="oai-certificate-card-top">
         <span style={{ fontSize: 15, fontWeight: 600 }}>ChatGPT</span>
         <span style={{ fontSize: 15, fontWeight: 700, textAlign: "right", lineHeight: "20px" }}>
@@ -369,11 +373,7 @@ function ItemPanel({
           </button>
         </div>
         <div className="flex items-center" style={{ gap: 8 }}>
-          <button
-            onClick={onBack}
-            className="flex items-center gap-8 px-12 py-8 rounded-8 transition-colors duration-fast hover:opacity-90"
-            style={{ background: "#0056d2", color: "#fff", fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif', fontSize: 14, fontWeight: 600, lineHeight: "20px" }}
-          >
+          <button onClick={onBack} className="oai-coursera-btn">
             <svg viewBox="0 0 1155 164" width="80" height="11" fill="currentColor" aria-hidden>
               <path d={COURSERA_SVG_PATH} fillRule="nonzero" />
             </svg>
@@ -478,11 +478,7 @@ function XdpPanel({
           </button>
         </div>
         <div className="flex items-center" style={{ gap: 8 }}>
-          <button
-            onClick={onBack}
-            className="flex items-center gap-8 px-12 py-8 rounded-8 transition-colors duration-fast hover:opacity-90"
-            style={{ background: "#0056d2", color: "#fff", fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif', fontSize: 14, fontWeight: 600, lineHeight: "20px" }}
-          >
+          <button onClick={onBack} className="oai-coursera-btn">
             <svg viewBox="0 0 1155 164" width="80" height="11" fill="currentColor" aria-hidden>
               <path d={COURSERA_SVG_PATH} fillRule="nonzero" />
             </svg>
@@ -501,7 +497,14 @@ function XdpPanel({
           {/* Hero + Module list side-by-side */}
           <div style={{ display: "flex", gap: 24, alignItems: "flex-start" }}>
             {/* Hero */}
-            <div className="oai-xdp-hero" style={{ flex: 1, minWidth: 0 }}>
+            <div
+              className="oai-xdp-hero"
+              style={{
+                flex: 1,
+                minWidth: 0,
+                ...(enrollment.brandSurfaceTint ? { background: enrollment.brandSurfaceTint } : {}),
+              }}
+            >
               <span style={{ fontSize: 22, fontWeight: 700, lineHeight: "28px" }}>OpenAI</span>
               <h1 style={{ fontSize: 32, fontWeight: 700, lineHeight: "40px", margin: 0, marginTop: 8 }}>
                 {enrollment.title}
@@ -631,8 +634,6 @@ function MainPanel({
   onBack: () => void;
   onSelectCourse: (id: string) => void;
 }) {
-  const totalItems = enrollment.modules.reduce((s, m) => s + m.items.length, 0);
-  const doneItems = enrollment.modules.reduce((s, m) => s + m.items.filter((i) => i.completed).length, 0);
   const currentModule = enrollment.modules.find((m) => m.id === enrollment.currentModuleId);
 
   return (
@@ -651,11 +652,7 @@ function MainPanel({
           </button>
         </div>
         <div className="flex items-center" style={{ gap: 8 }}>
-          <button
-            onClick={onBack}
-            className="flex items-center gap-8 px-12 py-8 rounded-8 transition-colors duration-fast hover:opacity-90"
-            style={{ background: "#0056d2", color: "#fff", fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif', fontSize: 14, fontWeight: 600, lineHeight: "20px" }}
-          >
+          <button onClick={onBack} className="oai-coursera-btn">
             <svg viewBox="0 0 1155 164" width="80" height="11" fill="currentColor" aria-hidden>
               <path d={COURSERA_SVG_PATH} fillRule="nonzero" />
             </svg>
@@ -670,10 +667,6 @@ function MainPanel({
       {/* Scrollable content */}
       <main className="flex-1 overflow-y-auto" style={{ padding: "0 40px 32px" }}>
         <div className="flex flex-col" style={{ maxWidth: 960, gap: 32 }}>
-          <span className="oai-label" style={{ color: "var(--oai-text-secondary)", letterSpacing: "0.05em" }}>
-            OpenAI Certified
-          </span>
-
           {/* Header */}
           <div className="flex items-start" style={{ gap: 24 }}>
             <OaiProgressRing percent={enrollment.progressPercent} size={80} />
@@ -682,14 +675,6 @@ function MainPanel({
               <p className="oai-body" style={{ color: "var(--oai-text-secondary)", margin: 0 }}>
                 {enrollment.shortDescription}
               </p>
-              <div className="flex items-center" style={{ gap: 16, marginTop: 4 }}>
-                <span className="oai-label" style={{ color: "var(--oai-text-secondary)" }}>
-                  {doneItems} / {totalItems} items complete
-                </span>
-                <span className="oai-label" style={{ color: "var(--oai-text-secondary)" }}>
-                  {enrollment.modules.length} modules
-                </span>
-              </div>
             </div>
           </div>
 
@@ -710,19 +695,6 @@ function MainPanel({
               </button>
             </div>
           )}
-
-          {/* Progress bar */}
-          <div>
-            <div className="flex items-center justify-between" style={{ marginBottom: 8 }}>
-              <span className="oai-heading-sm">Overall progress</span>
-              <span className="oai-label" style={{ color: "var(--oai-accent)" }}>
-                {enrollment.progressPercent}%
-              </span>
-            </div>
-            <div className="oai-progress-track" style={{ height: 8, borderRadius: 4 }}>
-              <div className="oai-progress-fill" style={{ width: `${enrollment.progressPercent}%`, borderRadius: 4 }} />
-            </div>
-          </div>
 
           {/* Skills | Daily Goals + Weekly Activity */}
           <div style={{ display: "flex", gap: 24, alignItems: "flex-start" }}>
