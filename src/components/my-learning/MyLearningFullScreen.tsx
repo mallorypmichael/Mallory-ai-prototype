@@ -191,9 +191,9 @@ function CourseNav({ enrollments, selected, viewMode, onSelect, onClose, onMyLea
 
 function DailyGoals({ goals }: { goals: OpenAIDailyGoal[] }) {
   return (
-    <div className="oai-card" style={{ padding: "24px 28px" }}>
-      <h3 className="oai-heading-sm" style={{ marginBottom: 20 }}>Daily goals</h3>
-      <ul className="flex flex-col" style={{ gap: 14, listStyle: "none", margin: 0, padding: 0 }}>
+    <div className="oai-card" style={{ padding: "24px 28px", width: "100%" }}>
+      <h3 className="oai-heading-sm" style={{ marginTop: 0, marginBottom: 20 }}>Daily goals</h3>
+      <ul className="flex flex-col" style={{ gap: 16, listStyle: "none", margin: 0, padding: 0 }}>
         {goals.map((g) => {
           const done = g.current >= g.target;
           return (
@@ -221,7 +221,7 @@ function DailyGoals({ goals }: { goals: OpenAIDailyGoal[] }) {
 function OaiSkillProgress({ skills }: { skills: OpenAISkill[] }) {
   return (
     <div className="oai-card" style={{ padding: "24px 28px", flex: 1, minWidth: 0 }}>
-      <h3 className="oai-heading-sm" style={{ marginBottom: 20 }}>Skills</h3>
+      <h3 className="oai-heading-sm" style={{ marginTop: 0, marginBottom: 20 }}>Skills</h3>
       <div className="flex flex-col" style={{ gap: 16 }}>
         {skills.map((s) => {
           const pct = s.total > 0 ? Math.min(100, Math.round((s.current / s.total) * 100)) : 0;
@@ -232,15 +232,17 @@ function OaiSkillProgress({ skills }: { skills: OpenAISkill[] }) {
                 <span className="oai-body" style={{ minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                   {s.label}
                 </span>
-                {complete ? (
-                  <span className="oai-skill-complete-icon">
-                    <span className="material-symbols-rounded" style={{ fontSize: 12 }}>check</span>
-                  </span>
-                ) : (
-                  <span className="oai-label" style={{ color: "var(--oai-text-secondary)", flexShrink: 0 }}>
-                    {s.current}/{s.total}
-                  </span>
-                )}
+                <span className="oai-skill-row-meta">
+                  {complete ? (
+                    <span className="oai-skill-complete-icon">
+                      <span className="material-symbols-rounded" style={{ fontSize: 12 }}>check</span>
+                    </span>
+                  ) : (
+                    <span className="oai-label" style={{ color: "var(--oai-text-secondary)" }}>
+                      {s.current}/{s.total}
+                    </span>
+                  )}
+                </span>
               </div>
               <div className="oai-skill-bar-track">
                 <div className="oai-skill-bar-fill" style={{ width: `${pct}%` }} />
@@ -257,9 +259,9 @@ function OaiSkillProgress({ skills }: { skills: OpenAISkill[] }) {
 
 function OaiWeeklyActivityCard({ activity }: { activity: OpenAIWeeklyActivity }) {
   return (
-    <div className="oai-card" style={{ padding: "24px 28px" }}>
-      <div className="flex items-center" style={{ gap: 12, marginBottom: 16 }}>
-        <h3 className="oai-heading-sm">Weekly activity</h3>
+    <div className="oai-card" style={{ padding: "24px 28px", width: "100%" }}>
+      <div className="flex items-center" style={{ gap: 12, marginBottom: 20 }}>
+        <h3 className="oai-heading-sm" style={{ margin: 0 }}>Weekly activity</h3>
         <span className="oai-streak-chip">
           <span className="material-symbols-rounded" style={{ fontSize: 12 }}>calendar_month</span>
           {activity.streakDays} day streak
@@ -699,7 +701,17 @@ function MainPanel({
           {/* Skills | Daily Goals + Weekly Activity */}
           <div style={{ display: "flex", gap: 28, alignItems: "flex-start" }}>
             <OaiSkillProgress skills={skills} />
-            <div style={{ display: "flex", flexDirection: "column", gap: 28, flexShrink: 0 }}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 28,
+                flexShrink: 0,
+                alignSelf: "stretch",
+                minWidth: 280,
+                width: "min(100%, 360px)",
+              }}
+            >
               <DailyGoals goals={goals} />
               <OaiWeeklyActivityCard activity={weeklyActivity} />
             </div>

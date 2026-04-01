@@ -118,12 +118,15 @@ export interface OpenAIEnrollment {
   skillTags: string[];
   /** Optional hero / certificate surface tint (e.g. ChatGPT Foundations). */
   brandSurfaceTint?: string;
+  /** Shorter label for compact UI (e.g. inline course stepper). Defaults to `title`. */
+  stripTitle?: string;
 }
 
 export const openAIEnrollments: OpenAIEnrollment[] = [
   {
     id: "oai-1",
     title: "ChatGPT Foundations Course",
+    stripTitle: "ChatGPT Foundations",
     shortDescription: "Master the fundamentals of conversational AI, prompt design, and responsible usage of large language models.",
     level: "Beginner",
     estimatedHours: 40,
@@ -171,9 +174,10 @@ export const openAIEnrollments: OpenAIEnrollment[] = [
   {
     id: "oai-2",
     title: "Applied AI Foundations Course",
+    stripTitle: "Applied AI Foundations",
     shortDescription: "Build practical AI workflows — from prompt engineering to API integration and output evaluation.",
     level: "Intermediate",
-    estimatedHours: 60,
+    estimatedHours: 10,
     status: "In progress",
     progressPercent: 35,
     modules: [
@@ -239,6 +243,7 @@ export const openAIEnrollments: OpenAIEnrollment[] = [
   {
     id: "oai-3",
     title: "AI for Business Strategy",
+    stripTitle: "Business strategy",
     shortDescription: "Apply AI to real business problems — from automation to decision-making and change management.",
     level: "Advanced",
     estimatedHours: 50,
@@ -286,6 +291,35 @@ export const openAIEnrollments: OpenAIEnrollment[] = [
       "Evaluate AI vendors and solutions against business requirements",
     ],
     skillTags: ["AI Strategy", "Change Management", "ROI Analysis", "Vendor Evaluation", "Business Case Development", "Enterprise AI", "KPI Frameworks"],
+  },
+  {
+    id: "oai-4",
+    title: "Capstone",
+    shortDescription:
+      "Integrate everything you've learned in a final project and demonstrate practical AI mastery across the program.",
+    level: "Advanced",
+    estimatedHours: 20,
+    status: "Not started",
+    progressPercent: 0,
+    modules: [
+      {
+        id: "m4-1",
+        title: "Capstone project",
+        items: [
+          { id: "i4-1", title: "Project brief", type: "Reading", completed: false },
+          { id: "i4-2", title: "Capstone submission", type: "Graded Assessment", completed: false },
+        ],
+      },
+    ],
+    currentModuleId: "m4-1",
+    currentItemId: "i4-1",
+    currentItemTitle: "Project brief",
+    lastAccessedAt: "",
+    learningOutcomes: [
+      "Synthesize skills from the OpenAI Certified program in an end-to-end deliverable",
+      "Demonstrate responsible, production-minded use of AI tools",
+    ],
+    skillTags: ["Capstone", "AI Integration", "Project Delivery"],
   },
 ];
 

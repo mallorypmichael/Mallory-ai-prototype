@@ -527,7 +527,7 @@
 .oai-course-strip {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 0;
   width: 100%;
   padding: 20px 28px;
@@ -535,6 +535,7 @@
   border-radius: var(--oai-radius-lg);
   background: var(--oai-bg);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  overflow-x: auto;
 }
 
 .oai-course-strip-item {
@@ -553,8 +554,7 @@
   color: var(--oai-text-primary);
   text-align: left;
   transition: background 120ms ease;
-  flex: 1;
-  min-width: 0;
+  flex: 0 0 auto;
 }
 .oai-course-strip-item:hover {
   background: var(--oai-bg-secondary);
@@ -571,19 +571,17 @@
 }
 
 .oai-course-strip-label {
-  flex: 1;
-  min-width: 0;
+  flex-shrink: 0;
   text-align: left;
   line-height: 16px;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .oai-course-strip-icon {
   width: 24px;
   height: 24px;
   border-radius: 50%;
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -596,8 +594,22 @@
   color: var(--oai-gray-0);
 }
 .oai-course-strip-icon[data-state="current"] {
+  position: relative;
+  background: var(--oai-bg);
+  border: 2px solid var(--oai-text-primary);
+  color: var(--oai-text-primary);
+}
+
+.oai-course-strip-icon[data-state="current"]::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
   background: var(--oai-text-primary);
-  color: var(--oai-gray-0);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 .oai-course-strip-icon[data-state="upcoming"] {
   background: var(--oai-progress-track-bg);
@@ -611,8 +623,27 @@
   flex: none;
   align-self: center;
 }
+/* Softer than node fill (--oai-accent); still reads clearly vs #EDEDED track */
 .oai-course-strip-connector[data-done="true"] {
-  background: var(--oai-accent);
+  background: var(--oai-gray-700);
+}
+
+/* Fixed via portal so it isn’t clipped by .chatgpt-chat-area overflow */
+.oai-course-strip-tooltip {
+  max-width: min(280px, calc(100vw - 32px));
+  padding: 8px 12px;
+  background: var(--oai-bg);
+  border: 1px solid var(--oai-border);
+  border-radius: var(--oai-radius-sm);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  font-family: var(--oai-font);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+  color: var(--oai-text-primary);
+  text-align: left;
+  word-break: break-word;
+  pointer-events: none;
 }
 
 
@@ -629,6 +660,15 @@
   align-items: center;
   justify-content: space-between;
   gap: 10px;
+}
+
+/* Same horizontal slot as fractions so checkmarks align with bar right edge */
+.oai-skill-row-meta {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 2.75rem;
 }
 
 .oai-skill-bar-track {

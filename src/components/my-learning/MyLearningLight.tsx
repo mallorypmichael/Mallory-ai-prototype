@@ -1,3 +1,5 @@
+import { useCallback, useState } from "react";
+import { createPortal } from "react-dom";
 import type { OpenAIEnrollment } from "../../data/mockData";
 
 /* ── Progress ring (inline-sized) ────────────── */
@@ -130,42 +132,75 @@ interface CourseProgressStripProps {
 }
 
 function CourseProgressStrip({ enrollments, onSelect }: CourseProgressStripProps) {
+  const [tip, setTip] = useState<{ text: string; left: number; top: number } | null>(null);
+
+  const showTip = useCallback((el: HTMLElement, text: string) => {
+    const r = el.getBoundingClientRect();
+    const maxW = 280;
+    const margin = 16;
+    let left = r.left;
+    const top = r.bottom + 8;
+    if (left + maxW > window.innerWidth - margin) {
+      left = Math.max(margin, window.innerWidth - margin - maxW);
+    }
+    setTip({ text, left, top });
+  }, []);
+
+  const hideTip = useCallback(() => setTip(null), []);
+
   return (
-    <div className="oai-course-strip">
-      {enrollments.map((e, i) => {
-        const state = e.status === "Complete" ? "complete" : e.status === "In progress" ? "current" : "upcoming";
-        return (
-          <div key={e.id} style={{ display: "contents" }}>
-            {i > 0 && (
-              <div
-                className="oai-course-strip-connector"
-                data-done={enrollments[i - 1].status === "Complete"}
-              />
-            )}
-            <button
-              type="button"
-              className="oai-course-strip-item"
-              data-state={state}
-              title={`${i + 1}. ${e.title}`}
-              onClick={() => state !== "upcoming" && onSelect(e.id)}
-            >
-              <span className="oai-course-strip-icon" data-state={state}>
-                {state === "complete" ? (
-                  <span className="material-symbols-rounded" style={{ fontSize: 14 }}>check</span>
-                ) : state === "current" ? (
-                  <span className="material-symbols-rounded" style={{ fontSize: 14 }}>play_arrow</span>
-                ) : (
-                  <span className="material-symbols-rounded" style={{ fontSize: 14 }}>lock</span>
-                )}
-              </span>
-              <span className="oai-course-strip-label">
-                {i + 1}. {e.title}
-              </span>
-            </button>
-          </div>
-        );
-      })}
-    </div>
+    <>
+      <div className="oai-course-strip">
+        {enrollments.map((course, i) => {
+          const state =
+            course.status === "Complete" ? "complete" : course.status === "In progress" ? "current" : "upcoming";
+          const stripLabel = course.stripTitle ?? course.title;
+          return (
+            <div key={course.id} style={{ display: "contents" }}>
+              {i > 0 && (
+                <div
+                  className="oai-course-strip-connector"
+                  data-done={enrollments[i - 1].status === "Complete"}
+                />
+              )}
+              <button
+                type="button"
+                className="oai-course-strip-item"
+                data-state={state}
+                aria-label={
+                  state === "upcoming" ? `${course.title}, locked` : `${course.title}, view course`
+                }
+                onMouseEnter={(ev) => showTip(ev.currentTarget, course.title)}
+                onMouseLeave={hideTip}
+                onFocus={(ev) => showTip(ev.currentTarget, course.title)}
+                onBlur={hideTip}
+                onClick={() => state !== "upcoming" && onSelect(course.id)}
+              >
+                <span className="oai-course-strip-icon" data-state={state}>
+                  {state === "complete" ? (
+                    <span className="material-symbols-rounded" style={{ fontSize: 14 }}>check</span>
+                  ) : state === "current" ? null : (
+                    <span className="material-symbols-rounded" style={{ fontSize: 14 }}>lock</span>
+                  )}
+                </span>
+                <span className="oai-course-strip-label">{stripLabel}</span>
+              </button>
+            </div>
+          );
+        })}
+      </div>
+      {tip &&
+        createPortal(
+          <div
+            role="tooltip"
+            className="oai-course-strip-tooltip"
+            style={{ position: "fixed", left: tip.left, top: tip.top, zIndex: 10000 }}
+          >
+            {tip.text}
+          </div>,
+          document.body
+        )}
+    </>
   );
 }
 
