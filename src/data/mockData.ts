@@ -89,6 +89,7 @@ export interface OpenAIModuleItem {
 export interface OpenAIModule {
   id: string;
   title: string;
+  durationMin?: number;
   items: OpenAIModuleItem[];
 }
 
@@ -125,50 +126,77 @@ export interface OpenAIEnrollment {
 export const openAIEnrollments: OpenAIEnrollment[] = [
   {
     id: "oai-1",
-    title: "ChatGPT Foundations Course",
-    stripTitle: "ChatGPT Foundations",
-    shortDescription: "Master the fundamentals of conversational AI, prompt design, and responsible usage of large language models.",
+    title: "AI Foundations",
+    stripTitle: "AI Foundations",
+    shortDescription: "Understand how ChatGPT and large language models work, write effective prompts, and use AI responsibly in real work.",
     level: "Beginner",
-    estimatedHours: 40,
+    estimatedHours: 3,
     status: "Complete",
     progressPercent: 100,
     modules: [
       {
-        id: "m1-1", title: "Introduction to ChatGPT",
+        id: "m1-1", title: "Introduction", durationMin: 21,
         items: [
           { id: "i1-1", title: "Welcome to the course", type: "Video", completed: true },
-          { id: "i1-2", title: "How ChatGPT works", type: "Reading", completed: true },
-          { id: "i1-3", title: "Your first conversation", type: "Practice", completed: true },
-          { id: "i1-4", title: "Quiz: ChatGPT basics", type: "Graded Assessment", completed: true },
+          { id: "i1-2", title: "How this course is structured", type: "Reading", completed: true },
+          { id: "i1-3", title: "Quiz: Introduction", type: "Graded Assessment", completed: true },
         ],
       },
       {
-        id: "m1-2", title: "Effective Prompting",
+        id: "m1-2", title: "Understanding Large Language Models", durationMin: 34,
         items: [
-          { id: "i1-5", title: "Anatomy of a prompt", type: "Video", completed: true },
-          { id: "i1-6", title: "Prompt patterns", type: "Reading", completed: true },
-          { id: "i1-7", title: "Practice prompting", type: "Practice", completed: true },
+          { id: "i1-4", title: "What is a large language model?", type: "Video", completed: true },
+          { id: "i1-5", title: "Strengths and limitations", type: "Reading", completed: true },
+          { id: "i1-6", title: "When to rely on human judgment", type: "Reading", completed: true },
+          { id: "i1-7", title: "Quiz: LLMs", type: "Graded Assessment", completed: true },
         ],
       },
       {
-        id: "m1-3", title: "Responsible AI Usage",
+        id: "m1-3", title: "Structured Prompting and Evaluating Outputs", durationMin: 27,
         items: [
-          { id: "i1-8", title: "Ethics and limitations", type: "Video", completed: true },
-          { id: "i1-9", title: "Final assessment", type: "Graded Assessment", completed: true },
+          { id: "i1-8", title: "Frameworks for effective prompts", type: "Video", completed: true },
+          { id: "i1-9", title: "Iterating on responses", type: "Practice", completed: true },
+          { id: "i1-10", title: "Evaluating AI outputs", type: "Reading", completed: true },
+        ],
+      },
+      {
+        id: "m1-4", title: "Extending the Model", durationMin: 25,
+        items: [
+          { id: "i1-11", title: "Adding context from files and search", type: "Video", completed: true },
+          { id: "i1-12", title: "Practice: Extending capabilities", type: "Practice", completed: true },
+        ],
+      },
+      {
+        id: "m1-5", title: "Responsible Use", durationMin: 23,
+        items: [
+          { id: "i1-13", title: "Responsible AI guidelines", type: "Video", completed: true },
+          { id: "i1-14", title: "Privacy and practical considerations", type: "Reading", completed: true },
+        ],
+      },
+      {
+        id: "m1-6", title: "Reflections", durationMin: 21,
+        items: [
+          { id: "i1-15", title: "Course reflections", type: "Reading", completed: true },
+        ],
+      },
+      {
+        id: "m1-7", title: "Final Course Assessment", durationMin: 16,
+        items: [
+          { id: "i1-16", title: "Final assessment", type: "Graded Assessment", completed: true },
         ],
       },
     ],
-    currentModuleId: "m1-3",
-    currentItemId: "i1-9",
+    currentModuleId: "m1-7",
+    currentItemId: "i1-16",
     currentItemTitle: "Final assessment",
     lastAccessedAt: "2026-03-20T16:00:00Z",
     learningOutcomes: [
-      "Master ChatGPT for your projects, navigate confidently, and set it up to understand your working context",
-      "Ask better questions, get better results, learn the prompt structure that creates usable outputs",
-      "Use AI tools that actually help — generate images, use voice, canvas, and search for current content",
-      "Keep your expertise front and center, review AI work critically while protecting privacy and maintaining your role as the expert",
+      "Understand how ChatGPT and large language models work, including their strengths, limitations, and when to rely on human judgment",
+      "Write effective prompts using simple frameworks to plan tasks, draft content, and iterate on responses for better results",
+      "Evaluate and improve AI generated outputs using simple frameworks and iteration techniques",
+      "Use ChatGPT responsibly in real work by adding context from files or search and applying practical responsible AI guidelines",
     ],
-    skillTags: ["Prompt Engineering", "Data Security", "Large Language Modeling", "Generative AI", "ChatGPT", "AI Personalization", "LLM Application", "Data Ethics", "Responsible AI"],
+    skillTags: ["Model Evaluation", "Information Privacy", "Context Management", "AI Workflows"],
     brandSurfaceTint: "#E6EFFF",
   },
   {
@@ -398,4 +426,63 @@ export const openAIWeeklyActivity: OpenAIWeeklyActivity = {
   streakDays: 4,
   itemsCompleted: 7,
   minutesLearned: 45,
+};
+
+/* ───────────────────────────────────────────────
+ * OpenAI Certified — First-time learner (demo) mocks
+ * ─────────────────────────────────────────────── */
+
+function enrollmentResetForFtux(e: OpenAIEnrollment): OpenAIEnrollment {
+  const m0 = e.modules[0];
+  const i0 = m0?.items[0];
+  return {
+    ...e,
+    status: "Not started",
+    progressPercent: 0,
+    modules: e.modules.map((m) => ({
+      ...m,
+      items: m.items.map((it) => ({ ...it, completed: false })),
+    })),
+    currentModuleId: m0?.id ?? e.currentModuleId,
+    currentItemId: i0?.id ?? e.currentItemId,
+    currentItemTitle: i0?.title ?? e.currentItemTitle,
+    lastAccessedAt: "",
+  };
+}
+
+/** All courses not started; first in path is the only startable course. */
+export const openAIEnrollmentsFtux: OpenAIEnrollment[] = openAIEnrollments.map(enrollmentResetForFtux);
+
+export const openAICertificatesFtux: OpenAICertificate[] = openAIEnrollmentsFtux
+  .filter((e) => e.status === "Complete")
+  .map((e) => ({
+    id: `cert-${e.id}`,
+    courseTitle: e.title,
+    earnedAt: e.lastAccessedAt,
+    ...(e.brandSurfaceTint ? { cardBackground: e.brandSurfaceTint } : {}),
+  }));
+
+export const openAIDailyGoalsFtux: OpenAIDailyGoal[] = openAIDailyGoals.map((g) => ({
+  ...g,
+  current: 0,
+}));
+
+export const openAISkillsFtux: OpenAISkill[] = openAISkills.map((s) => ({
+  ...s,
+  current: 0,
+}));
+
+export const openAIWeeklyActivityFtux: OpenAIWeeklyActivity = {
+  days: [
+    { label: "Mo", state: "upcoming" },
+    { label: "Tu", state: "upcoming" },
+    { label: "We", state: "upcoming" },
+    { label: "Th", state: "upcoming" },
+    { label: "Fr", state: "today" },
+    { label: "Sa", state: "upcoming" },
+    { label: "Su", state: "upcoming" },
+  ],
+  streakDays: 0,
+  itemsCompleted: 0,
+  minutesLearned: 0,
 };

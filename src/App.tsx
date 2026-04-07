@@ -14,10 +14,15 @@ import {
   overviewSkillProgress,
   recentCertificates,
   openAIEnrollments,
+  openAIEnrollmentsFtux,
   openAIDailyGoals,
+  openAIDailyGoalsFtux,
   openAISkills,
+  openAISkillsFtux,
   openAIWeeklyActivity,
+  openAIWeeklyActivityFtux,
   openAICertificates,
+  openAICertificatesFtux,
 } from "./data/mockData";
 
 type AppView = "dashboard" | "chatgpt" | "fullCourse";
@@ -44,6 +49,13 @@ export default function App() {
   const [dashboardTab, setDashboardTab] = useState<DashboardTabId>("overview");
   const [selectedCourseId, setSelectedCourseId] = useState<string | undefined>();
   const [initialViewMode, setInitialViewMode] = useState<"overview" | "item" | "xdp">("overview");
+  const [firstTimeLearnerView, setFirstTimeLearnerView] = useState(false);
+
+  const myLearningEnrollments = firstTimeLearnerView ? openAIEnrollmentsFtux : openAIEnrollments;
+  const myLearningDailyGoals = firstTimeLearnerView ? openAIDailyGoalsFtux : openAIDailyGoals;
+  const myLearningSkills = firstTimeLearnerView ? openAISkillsFtux : openAISkills;
+  const myLearningWeekly = firstTimeLearnerView ? openAIWeeklyActivityFtux : openAIWeeklyActivity;
+  const myLearningCertificates = firstTimeLearnerView ? openAICertificatesFtux : openAICertificates;
 
   function goToFullCourse(courseId: string, mode: "overview" | "item" | "xdp" = "overview") {
     setSelectedCourseId(courseId);
@@ -54,7 +66,9 @@ export default function App() {
   if (view === "chatgpt") {
     return (
       <ChatGPTPage
-        enrollments={openAIEnrollments}
+        enrollments={myLearningEnrollments}
+        firstTimeLearnerView={firstTimeLearnerView}
+        onFirstTimeLearnerViewChange={setFirstTimeLearnerView}
         onBack={() => setView("dashboard")}
         onExpandCourse={(id) => goToFullCourse(id, "overview")}
         onResumeCourse={(id) => goToFullCourse(id, "item")}
@@ -65,11 +79,11 @@ export default function App() {
   if (view === "fullCourse") {
     return (
       <MyLearningFullScreen
-        enrollments={openAIEnrollments}
-        dailyGoals={openAIDailyGoals}
-        skills={openAISkills}
-        weeklyActivity={openAIWeeklyActivity}
-        certificates={openAICertificates}
+        enrollments={myLearningEnrollments}
+        dailyGoals={myLearningDailyGoals}
+        skills={myLearningSkills}
+        weeklyActivity={myLearningWeekly}
+        certificates={myLearningCertificates}
         initialCourseId={selectedCourseId}
         initialViewMode={initialViewMode}
         onClose={() => setView("chatgpt")}

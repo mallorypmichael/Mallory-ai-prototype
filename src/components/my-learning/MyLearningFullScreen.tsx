@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { OpenAIEnrollment, OpenAIDailyGoal, OpenAIModuleItem, OpenAISkill, OpenAIWeeklyActivity, OpenAICertificate } from "../../data/mockData";
+import { getFirstIncompleteCourse, isFirstIncompleteCourse, isNotStartedCourseLocked } from "../../lib/openAILearningPath";
 
 /* ── ChatGPT Logo (reused from ChatGPTPage) ──── */
 
@@ -524,7 +525,7 @@ function XdpPanel({
                   onClick={locked ? undefined : () => onGoToCourse(enrollment.id)}
                   disabled={locked}
                 >
-                  Go to course
+                  {enrollment.status === "Not started" && !locked ? "Start learning" : "Go to course"}
                 </button>
                 {enrollment.status === "Complete" && (
                   <button
@@ -551,7 +552,7 @@ function XdpPanel({
               {enrollment.modules.map((mod, mi) => (
                 <div key={mod.id} className="oai-xdp-module-row">
                   <span className="oai-label" style={{ color: "var(--oai-text-tertiary)" }}>
-                    Module {mi + 1} &middot; X min
+                    Module {mi + 1}{mod.durationMin ? ` \u2022 ${mod.durationMin} min` : ""}
                   </span>
                   <span className="oai-body-sm">{mod.title}</span>
                 </div>
@@ -559,10 +560,10 @@ function XdpPanel({
             </div>
           </div>
 
-          {/* What you'll learn */}
+          {/* What you will learn */}
           {enrollment.learningOutcomes.length > 0 && (
             <div>
-              <h2 className="oai-heading-sm" style={{ marginBottom: 20 }}>What you'll learn</h2>
+              <h2 className="oai-heading-sm" style={{ marginBottom: 20 }}>What you will learn:</h2>
               <div className="oai-xdp-outcomes-grid">
                 {enrollment.learningOutcomes.map((outcome, i) => (
                   <div key={i} className="oai-xdp-outcome">
@@ -640,6 +641,7 @@ function MainPanel({
   onSelectCourse: (id: string) => void;
 }) {
   const currentModule = enrollment.modules.find((m) => m.id === enrollment.currentModuleId);
+  const firstIncomplete = isFirstIncompleteCourse(enrollment, enrollments);
 
   return (
     <div className="flex flex-col flex-1 min-w-0 h-full">
@@ -683,8 +685,8 @@ function MainPanel({
             </div>
           </div>
 
-          {/* Resume card */}
-          {currentModule && enrollment.status !== "Complete" && (
+          {/* Resume / get started / locked (sequential path) */}
+          {currentModule && enrollment.status === "In progress" && (
             <div className="oai-card flex items-center justify-between" style={{ padding: "20px 28px" }}>
               <div className="flex flex-col" style={{ gap: 4 }}>
                 <span className="oai-body-sm" style={{ color: "var(--oai-text-secondary)" }}>
@@ -698,6 +700,29 @@ function MainPanel({
               <button className="oai-btn-primary" onClick={() => onResume(enrollment.id)}>
                 Resume
               </button>
+            </div>
+          )}
+          {currentModule && enrollment.status === "Not started" && firstIncomplete && (
+            <div className="oai-card flex items-center justify-between" style={{ padding: "20px 28px" }}>
+              <div className="flex flex-col" style={{ gap: 4 }}>
+                <span className="oai-body-sm" style={{ color: "var(--oai-text-secondary)" }}>
+                  Start your learning journey
+                </span>
+                <span className="oai-heading-sm">{enrollment.currentItemTitle}</span>
+                <span className="oai-body-sm" style={{ color: "var(--oai-text-tertiary)" }}>
+                  {currentModule.title}
+                </span>
+              </div>
+              <button className="oai-btn-primary" onClick={() => onResume(enrollment.id)}>
+                Start learning
+              </button>
+            </div>
+          )}
+          {enrollment.status === "Not started" && !firstIncomplete && (
+            <div className="oai-card" style={{ padding: "20px 28px" }}>
+              <span className="oai-body-sm" style={{ color: "var(--oai-text-secondary)" }}>
+                Complete previous courses in your path to unlock this course.
+              </span>
             </div>
           )}
 
@@ -824,11 +849,11 @@ export function MyLearningFullScreen({
   }
 
   function renderMainContent() {
-    if (viewMode === "xdp") {
+    if (viewMode === "xdp" || (viewMode === "overview" && selected.status === "Not started")) {
       return (
         <XdpPanel
           enrollment={selected}
-          locked={selected.status === "Not started"}
+          locked={isNotStartedCourseLocked(selected, enrollments)}
           onGoToCourse={handleGoToCourse}
           onBack={onBack}
         />
@@ -878,6 +903,9 @@ export function MyLearningFullScreen({
           const inProgress = enrollments.find((e) => e.status === "In progress");
           if (inProgress) {
             setSelectedId(inProgress.id);
+          } else {
+            const first = getFirstIncompleteCourse(enrollments);
+            if (first) setSelectedId(first.id);
           }
           setViewMode("overview");
         }}

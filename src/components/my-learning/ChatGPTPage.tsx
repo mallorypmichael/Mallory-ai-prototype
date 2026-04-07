@@ -14,12 +14,21 @@ function ChatGPTLogo({ size = 20 }: { size?: number }) {
 
 interface ChatGPTPageProps {
   enrollments: OpenAIEnrollment[];
+  firstTimeLearnerView: boolean;
+  onFirstTimeLearnerViewChange: (value: boolean) => void;
   onBack: () => void;
   onExpandCourse: (id: string) => void;
   onResumeCourse: (id: string) => void;
 }
 
-export function ChatGPTPage({ enrollments, onBack, onExpandCourse, onResumeCourse }: ChatGPTPageProps) {
+export function ChatGPTPage({
+  enrollments,
+  firstTimeLearnerView,
+  onFirstTimeLearnerViewChange,
+  onBack,
+  onExpandCourse,
+  onResumeCourse,
+}: ChatGPTPageProps) {
   return (
     <div className="openai-shell chatgpt-page">
       {/* Left icon sidebar */}
@@ -55,7 +64,25 @@ export function ChatGPTPage({ enrollments, onBack, onExpandCourse, onResumeCours
               expand_more
             </span>
           </button>
-          <div className="chatgpt-topbar-actions">
+          <div className="chatgpt-topbar-actions" style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={firstTimeLearnerView}
+              onClick={() => onFirstTimeLearnerViewChange(!firstTimeLearnerView)}
+              className="oai-body-sm"
+              style={{
+                padding: "8px 12px",
+                border: "1px solid var(--oai-border)",
+                borderRadius: "var(--oai-radius-sm)",
+                background: firstTimeLearnerView ? "var(--oai-bg-tertiary)" : "transparent",
+                color: "var(--oai-text-primary)",
+                cursor: "pointer",
+                fontFamily: "var(--oai-font)",
+              }}
+            >
+              First-time learner view
+            </button>
             <button
               onClick={onBack}
               className="oai-coursera-btn"
@@ -93,7 +120,9 @@ export function ChatGPTPage({ enrollments, onBack, onExpandCourse, onResumeCours
               </div>
               <div className="chatgpt-assistant-content">
                 <p className="chatgpt-assistant-text" style={{ margin: 0 }}>
-                  Here's where you left off in your OpenAI Certified program
+                  {firstTimeLearnerView
+                    ? "Here's how to get started with your OpenAI Certified program"
+                    : "Here's where you left off in your OpenAI Certified program"}
                 </p>
                 <MyLearningLight
                   enrollments={enrollments}

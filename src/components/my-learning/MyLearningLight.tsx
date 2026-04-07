@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import { createPortal } from "react-dom";
 import type { OpenAIEnrollment } from "../../data/mockData";
+import { isFirstIncompleteCourse } from "../../lib/openAILearningPath";
 
 /* ── Progress ring (inline-sized) ────────────── */
 
@@ -30,6 +31,7 @@ function ProgressRing({ percent, size = 64 }: { percent: number; size?: number }
 /* ── Module segmented bar ────────────────────── */
 
 function ModuleBar({ enrollment }: { enrollment: OpenAIEnrollment }) {
+  const notStarted = enrollment.status === "Not started";
   const completedModules = enrollment.modules.filter(
     (m) => m.items.every((i) => i.completed)
   ).length;
@@ -38,6 +40,9 @@ function ModuleBar({ enrollment }: { enrollment: OpenAIEnrollment }) {
     <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
       <div className="oai-module-bar">
         {enrollment.modules.map((m) => {
+          if (notStarted) {
+            return <div key={m.id} className="oai-module-segment" data-state="upcoming" />;
+          }
           const allDone = m.items.every((i) => i.completed);
           const isCurrent = m.id === enrollment.currentModuleId;
           const state = allDone ? "complete" : isCurrent ? "current" : "upcoming";
@@ -45,9 +50,11 @@ function ModuleBar({ enrollment }: { enrollment: OpenAIEnrollment }) {
         })}
       </div>
       <span className="oai-body-sm" style={{ color: "var(--oai-text-secondary)" }}>
-        {completedModules === enrollment.modules.length
-          ? `All ${enrollment.modules.length} modules complete`
-          : `Module ${completedModules + 1} of ${enrollment.modules.length}`}
+        {notStarted
+          ? `${enrollment.modules.length} modules`
+          : completedModules === enrollment.modules.length
+            ? `All ${enrollment.modules.length} modules complete`
+            : `Module ${completedModules + 1} of ${enrollment.modules.length}`}
       </span>
     </div>
   );
@@ -57,12 +64,14 @@ function ModuleBar({ enrollment }: { enrollment: OpenAIEnrollment }) {
 
 interface ResumeHeroCardProps {
   enrollment: OpenAIEnrollment;
+  enrollments: OpenAIEnrollment[];
   onResume: (id: string) => void;
   onExpand: (id: string) => void;
 }
 
-function ResumeHeroCard({ enrollment, onResume, onExpand }: ResumeHeroCardProps) {
+function ResumeHeroCard({ enrollment, enrollments, onResume, onExpand }: ResumeHeroCardProps) {
   const currentModule = enrollment.modules.find((m) => m.id === enrollment.currentModuleId);
+  const firstIncompleteHere = isFirstIncompleteCourse(enrollment, enrollments);
 
   return (
     <div className="oai-resume-hero" style={{ position: "relative" }}>
@@ -78,12 +87,19 @@ function ResumeHeroCard({ enrollment, onResume, onExpand }: ResumeHeroCardProps)
 
       <div style={{ display: "flex", flexDirection: "column", gap: 20, width: "100%", minWidth: 0 }}>
         <div className="oai-resume-hero-header" style={{ paddingRight: 48 }}>
-          <ProgressRing percent={enrollment.progressPercent} size={64} />
+          {enrollment.status !== "Not started" && (
+            <ProgressRing percent={enrollment.progressPercent} size={64} />
+          )}
           <div className="oai-resume-hero-info">
             <span className="oai-heading-md">{enrollment.title}</span>
             <span className="oai-body-sm" style={{ color: "var(--oai-text-secondary)" }}>
               {enrollment.level} &middot; {enrollment.estimatedHours} hours
             </span>
+            {enrollment.status === "Not started" && (
+              <span className="oai-body-sm" style={{ color: "var(--oai-text-secondary)", marginTop: 4 }}>
+                {enrollment.shortDescription}
+              </span>
+            )}
           </div>
         </div>
 
@@ -106,7 +122,17 @@ function ResumeHeroCard({ enrollment, onResume, onExpand }: ResumeHeroCardProps)
           </div>
         )}
 
-        <ModuleBar enrollment={enrollment} />
+        {enrollment.status === "Not started" && !firstIncompleteHere && (
+          <div className="oai-resume-position">
+            <span className="oai-body-sm" style={{ color: "var(--oai-text-secondary)" }}>
+              Complete previous courses in your path to unlock this course.
+            </span>
+          </div>
+        )}
+
+        {enrollment.status !== "Not started" && (
+          <ModuleBar enrollment={enrollment} />
+        )}
 
         {enrollment.status === "In progress" && (
           <div>
@@ -116,6 +142,18 @@ function ResumeHeroCard({ enrollment, onResume, onExpand }: ResumeHeroCardProps)
               onClick={() => onResume(enrollment.id)}
             >
               Resume
+            </button>
+          </div>
+        )}
+
+        {enrollment.status === "Not started" && firstIncompleteHere && (
+          <div>
+            <button
+              className="oai-btn-primary"
+              style={{ padding: "10px 28px", fontSize: 15 }}
+              onClick={() => onExpand(enrollment.id)}
+            >
+              Start
             </button>
           </div>
         )}
@@ -152,8 +190,12 @@ function CourseProgressStrip({ enrollments, onSelect }: CourseProgressStripProps
     <>
       <div className="oai-course-strip">
         {enrollments.map((course, i) => {
-          const state =
-            course.status === "Complete" ? "complete" : course.status === "In progress" ? "current" : "upcoming";
+          const state: "complete" | "current" | "upcoming" =
+            course.status === "Complete"
+              ? "complete"
+              : isFirstIncompleteCourse(course, enrollments)
+                ? "current"
+                : "upcoming";
           const stripLabel = course.stripTitle ?? course.title;
           return (
             <div key={course.id} style={{ display: "contents" }}>
@@ -222,6 +264,7 @@ export function MyLearningLight({ enrollments, onExpand, onResume, onViewDetails
     <div style={{ display: "flex", flexDirection: "column", gap: 12, width: "100%", alignItems: "stretch" }}>
       <ResumeHeroCard
         enrollment={currentCourse}
+        enrollments={enrollments}
         onResume={onResume}
         onExpand={onExpand}
       />
