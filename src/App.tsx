@@ -70,7 +70,7 @@ export default function App() {
         firstTimeLearnerView={firstTimeLearnerView}
         onFirstTimeLearnerViewChange={setFirstTimeLearnerView}
         onBack={() => setView("dashboard")}
-        onExpandCourse={(id) => goToFullCourse(id, "overview")}
+        onExpandCourse={(id) => goToFullCourse(id, "xdp")}
         onResumeCourse={(id) => goToFullCourse(id, "item")}
       />
     );

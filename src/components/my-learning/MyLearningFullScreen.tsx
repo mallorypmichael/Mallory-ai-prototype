@@ -93,7 +93,7 @@ function CourseNav({ enrollments, selected, viewMode, onSelect, onClose, onMyLea
             {selected.title}
           </span>
           <span className="material-symbols-rounded" style={{ fontSize: 16 }}>
-            expand_more
+            {dropdownOpen ? "expand_less" : "expand_more"}
           </span>
         </button>
 
@@ -191,27 +191,34 @@ function CourseNav({ enrollments, selected, viewMode, onSelect, onClose, onMyLea
 /* ── Daily goals ─────────────────────────────── */
 
 function DailyGoals({ goals }: { goals: OpenAIDailyGoal[] }) {
+  const allZero = goals.every((g) => g.current === 0);
   return (
     <div className="oai-card" style={{ padding: "24px 28px", width: "100%" }}>
       <h3 className="oai-heading-sm" style={{ marginTop: 0, marginBottom: 20 }}>Daily goals</h3>
-      <ul className="flex flex-col" style={{ gap: 16, listStyle: "none", margin: 0, padding: 0 }}>
-        {goals.map((g) => {
-          const done = g.current >= g.target;
-          return (
-            <li key={g.id} className="flex items-center" style={{ gap: 14 }}>
-              <span className="oai-goal-check material-symbols-rounded" data-done={done} style={{ fontSize: 14 }}>
-                {done ? "check" : ""}
-              </span>
-              <span className="oai-body" style={{ color: done ? "var(--oai-text-tertiary)" : "var(--oai-text-primary)", textDecoration: done ? "line-through" : "none" }}>
-                {g.label}
-              </span>
-              <span className="oai-label" style={{ marginLeft: "auto", color: "var(--oai-text-secondary)" }}>
-                {g.current}/{g.target}
-              </span>
-            </li>
-          );
-        })}
-      </ul>
+      {allZero ? (
+        <span className="oai-body" style={{ color: "var(--oai-text-secondary)" }}>
+          Your daily learning goals will appear here. Start a course to begin tracking your progress.
+        </span>
+      ) : (
+        <ul className="flex flex-col" style={{ gap: 16, listStyle: "none", margin: 0, padding: 0 }}>
+          {goals.map((g) => {
+            const done = g.current >= g.target;
+            return (
+              <li key={g.id} className="flex items-center" style={{ gap: 14 }}>
+                <span className="oai-goal-check material-symbols-rounded" data-done={done} style={{ fontSize: 14 }}>
+                  {done ? "check" : ""}
+                </span>
+                <span className="oai-body" style={{ color: done ? "var(--oai-text-tertiary)" : "var(--oai-text-primary)", textDecoration: done ? "line-through" : "none" }}>
+                  {g.label}
+                </span>
+                <span className="oai-label" style={{ marginLeft: "auto", color: "var(--oai-text-secondary)" }}>
+                  {g.current}/{g.target}
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+      )}
     </div>
   );
 }
@@ -220,41 +227,57 @@ function DailyGoals({ goals }: { goals: OpenAIDailyGoal[] }) {
 /* ── Skill progress ─────────────────────────── */
 
 function OaiSkillProgress({ skills }: { skills: OpenAISkill[] }) {
+  const allZero = skills.every((s) => s.current === 0);
   return (
     <div
       className="oai-card"
       style={{ padding: "24px 28px", flex: 1, minWidth: 0, minHeight: 0, alignSelf: "stretch" }}
     >
       <h3 className="oai-heading-sm" style={{ marginTop: 0, marginBottom: 20 }}>Skills</h3>
-      <div className="flex flex-col" style={{ gap: 16 }}>
-        {skills.map((s) => {
-          const pct = s.total > 0 ? Math.min(100, Math.round((s.current / s.total) * 100)) : 0;
-          const complete = s.current >= s.total;
-          return (
-            <div key={s.id} className="oai-skill-row">
-              <div className="oai-skill-row-header">
-                <span className="oai-body" style={{ minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                  {s.label}
-                </span>
-                <span className="oai-skill-row-meta">
-                  {complete ? (
-                    <span className="oai-skill-complete-icon">
-                      <span className="material-symbols-rounded" style={{ fontSize: 12 }}>check</span>
-                    </span>
-                  ) : (
-                    <span className="oai-label" style={{ color: "var(--oai-text-secondary)" }}>
-                      {s.current}/{s.total}
-                    </span>
-                  )}
-                </span>
+      {allZero ? (
+        <div className="flex flex-col" style={{ gap: 12 }}>
+          <span className="oai-body" style={{ color: "var(--oai-text-secondary)" }}>
+            You'll track your skill progress here once you start learning.
+          </span>
+          <div className="flex flex-col" style={{ gap: 8 }}>
+            {skills.map((s) => (
+              <span key={s.id} className="oai-body-sm" style={{ color: "var(--oai-text-tertiary)" }}>
+                {s.label}
+              </span>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className="flex flex-col" style={{ gap: 16 }}>
+          {skills.map((s) => {
+            const pct = s.total > 0 ? Math.min(100, Math.round((s.current / s.total) * 100)) : 0;
+            const complete = s.current >= s.total;
+            return (
+              <div key={s.id} className="oai-skill-row">
+                <div className="oai-skill-row-header">
+                  <span className="oai-body" style={{ minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    {s.label}
+                  </span>
+                  <span className="oai-skill-row-meta">
+                    {complete ? (
+                      <span className="oai-skill-complete-icon">
+                        <span className="material-symbols-rounded" style={{ fontSize: 12 }}>check</span>
+                      </span>
+                    ) : (
+                      <span className="oai-label" style={{ color: "var(--oai-text-secondary)" }}>
+                        {s.current}/{s.total}
+                      </span>
+                    )}
+                  </span>
+                </div>
+                <div className="oai-skill-bar-track">
+                  <div className="oai-skill-bar-fill" style={{ width: `${pct}%` }} />
+                </div>
               </div>
-              <div className="oai-skill-bar-track">
-                <div className="oai-skill-bar-fill" style={{ width: `${pct}%` }} />
-              </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
@@ -262,29 +285,40 @@ function OaiSkillProgress({ skills }: { skills: OpenAISkill[] }) {
 /* ── Weekly activity ────────────────────────── */
 
 function OaiWeeklyActivityCard({ activity }: { activity: OpenAIWeeklyActivity }) {
+  const isZero = activity.streakDays === 0 && activity.itemsCompleted === 0;
   return (
     <div className="oai-card" style={{ padding: "24px 28px", width: "100%" }}>
       <div className="flex items-center" style={{ gap: 12, marginBottom: 20 }}>
         <h3 className="oai-heading-sm" style={{ margin: 0 }}>Weekly activity</h3>
-        <span className="oai-streak-chip">
-          <span className="material-symbols-rounded" style={{ fontSize: 12 }}>calendar_month</span>
-          {activity.streakDays} day streak
+        {!isZero && (
+          <span className="oai-streak-chip">
+            <span className="material-symbols-rounded" style={{ fontSize: 12 }}>calendar_month</span>
+            {activity.streakDays} day streak
+          </span>
+        )}
+      </div>
+      {isZero ? (
+        <span className="oai-body" style={{ color: "var(--oai-text-secondary)" }}>
+          Your weekly learning activity will show up here. Complete your first lesson to get started.
         </span>
-      </div>
-      <div className="flex" style={{ gap: 8, marginBottom: 20 }}>
-        {activity.days.map((d) => (
-          <div key={d.label} className="oai-weekly-day" data-state={d.state}>
-            {d.state === "done" ? (
-              <span className="material-symbols-rounded" style={{ fontSize: 16 }}>check</span>
-            ) : (
-              d.label
-            )}
+      ) : (
+        <>
+          <div className="flex" style={{ gap: 8, marginBottom: 20 }}>
+            {activity.days.map((d) => (
+              <div key={d.label} className="oai-weekly-day" data-state={d.state}>
+                {d.state === "done" ? (
+                  <span className="material-symbols-rounded" style={{ fontSize: 16 }}>check</span>
+                ) : (
+                  d.label
+                )}
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      <span className="oai-body-sm" style={{ color: "var(--oai-text-secondary)" }}>
-        {activity.itemsCompleted} items completed &middot; {activity.minutesLearned} minutes learned
-      </span>
+          <span className="oai-body-sm" style={{ color: "var(--oai-text-secondary)" }}>
+            {activity.itemsCompleted} items completed &middot; {activity.minutesLearned} minutes learned
+          </span>
+        </>
+      )}
     </div>
   );
 }
@@ -702,18 +736,18 @@ function MainPanel({
               </button>
             </div>
           )}
-          {currentModule && enrollment.status === "Not started" && firstIncomplete && (
+          {enrollment.status === "Not started" && firstIncomplete && (
             <div className="oai-card flex items-center justify-between" style={{ padding: "20px 28px" }}>
               <div className="flex flex-col" style={{ gap: 4 }}>
                 <span className="oai-body-sm" style={{ color: "var(--oai-text-secondary)" }}>
                   Start your learning journey
                 </span>
-                <span className="oai-heading-sm">{enrollment.currentItemTitle}</span>
+                <span className="oai-heading-sm">{enrollment.title}</span>
                 <span className="oai-body-sm" style={{ color: "var(--oai-text-tertiary)" }}>
-                  {currentModule.title}
+                  {enrollment.modules.length} modules &middot; ~{enrollment.estimatedHours} hours
                 </span>
               </div>
-              <button className="oai-btn-primary" onClick={() => onResume(enrollment.id)}>
+              <button className="oai-btn-primary" onClick={() => onSelectCourse(enrollment.id)}>
                 Start learning
               </button>
             </div>
@@ -820,18 +854,13 @@ export function MyLearningFullScreen({
   if (!selected) return null;
 
   function handleSelectCourse(courseId: string) {
-    const course = enrollments.find((e) => e.id === courseId);
-    if (course?.status === "In progress") {
-      if (courseId === selectedId) {
-        setViewMode(viewMode === "item" ? "xdp" : "item");
-      } else {
-        setSelectedId(courseId);
-        setViewMode("item");
-      }
-    } else {
-      setSelectedId(courseId);
+    if (courseId === selectedId) {
       setViewMode("xdp");
+      return;
     }
+    const course = enrollments.find((e) => e.id === courseId);
+    setSelectedId(courseId);
+    setViewMode(course?.status === "In progress" ? "item" : "xdp");
   }
 
   function handleGoToCourse(courseId: string) {
@@ -849,7 +878,7 @@ export function MyLearningFullScreen({
   }
 
   function renderMainContent() {
-    if (viewMode === "xdp" || (viewMode === "overview" && selected.status === "Not started")) {
+    if (viewMode === "xdp") {
       return (
         <XdpPanel
           enrollment={selected}
