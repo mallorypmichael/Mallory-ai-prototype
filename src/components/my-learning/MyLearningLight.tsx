@@ -147,13 +147,20 @@ function ResumeHeroCard({ enrollment, enrollments, onResume, onExpand }: ResumeH
         )}
 
         {enrollment.status === "Not started" && firstIncompleteHere && (
-          <div>
+          <div className="flex items-center" style={{ gap: 12 }}>
             <button
               className="oai-btn-primary"
               style={{ padding: "10px 28px", fontSize: 15 }}
-              onClick={() => onExpand(enrollment.id)}
+              onClick={() => onResume(enrollment.id)}
             >
               Start
+            </button>
+            <button
+              className="oai-btn-secondary"
+              style={{ padding: "10px 28px", fontSize: 15 }}
+              onClick={() => onExpand(enrollment.id)}
+            >
+              View details
             </button>
           </div>
         )}
