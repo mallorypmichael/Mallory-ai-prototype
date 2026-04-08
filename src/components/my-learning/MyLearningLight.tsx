@@ -223,7 +223,7 @@ function CourseProgressStrip({ enrollments, onSelect }: CourseProgressStripProps
                 onMouseLeave={hideTip}
                 onFocus={(ev) => showTip(ev.currentTarget, course.title)}
                 onBlur={hideTip}
-                onClick={() => state !== "upcoming" && onSelect(course.id)}
+                onClick={() => onSelect(course.id)}
               >
                 <span className="oai-course-strip-icon" data-state={state}>
                   {state === "complete" ? (

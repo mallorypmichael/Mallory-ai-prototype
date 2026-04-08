@@ -191,34 +191,27 @@ function CourseNav({ enrollments, selected, viewMode, onSelect, onClose, onMyLea
 /* ── Daily goals ─────────────────────────────── */
 
 function DailyGoals({ goals }: { goals: OpenAIDailyGoal[] }) {
-  const allZero = goals.every((g) => g.current === 0);
   return (
     <div className="oai-card" style={{ padding: "24px 28px", width: "100%" }}>
       <h3 className="oai-heading-sm" style={{ marginTop: 0, marginBottom: 20 }}>Daily goals</h3>
-      {allZero ? (
-        <span className="oai-body" style={{ color: "var(--oai-text-secondary)" }}>
-          Your daily learning goals will appear here. Start a course to begin tracking your progress.
-        </span>
-      ) : (
-        <ul className="flex flex-col" style={{ gap: 16, listStyle: "none", margin: 0, padding: 0 }}>
-          {goals.map((g) => {
-            const done = g.current >= g.target;
-            return (
-              <li key={g.id} className="flex items-center" style={{ gap: 14 }}>
-                <span className="oai-goal-check material-symbols-rounded" data-done={done} style={{ fontSize: 14 }}>
-                  {done ? "check" : ""}
-                </span>
-                <span className="oai-body" style={{ color: done ? "var(--oai-text-tertiary)" : "var(--oai-text-primary)", textDecoration: done ? "line-through" : "none" }}>
-                  {g.label}
-                </span>
-                <span className="oai-label" style={{ marginLeft: "auto", color: "var(--oai-text-secondary)" }}>
-                  {g.current}/{g.target}
-                </span>
-              </li>
-            );
-          })}
-        </ul>
-      )}
+      <ul className="flex flex-col" style={{ gap: 16, listStyle: "none", margin: 0, padding: 0 }}>
+        {goals.map((g) => {
+          const done = g.current >= g.target;
+          return (
+            <li key={g.id} className="flex items-center" style={{ gap: 14 }}>
+              <span className="oai-goal-check material-symbols-rounded" data-done={done} style={{ fontSize: 14 }}>
+                {done ? "check" : ""}
+              </span>
+              <span className="oai-body" style={{ color: done ? "var(--oai-text-tertiary)" : "var(--oai-text-primary)", textDecoration: done ? "line-through" : "none" }}>
+                {g.label}
+              </span>
+              <span className="oai-label" style={{ marginLeft: "auto", color: "var(--oai-text-secondary)" }}>
+                {g.current}/{g.target}
+              </span>
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }
@@ -532,7 +525,7 @@ function XdpPanel({
 
       {/* Scrollable content */}
       <main className="flex-1 overflow-y-auto" style={{ padding: "0 48px 40px" }}>
-        <div className="flex flex-col" style={{ maxWidth: 960, gap: 40 }}>
+        <div className="flex flex-col" style={{ maxWidth: 960, gap: 16 }}>
 
           {/* Hero + Module list side-by-side */}
           <div style={{ display: "flex", gap: 28, alignItems: "flex-start" }}>
@@ -706,10 +699,10 @@ function MainPanel({
       </div>
 
       {/* Scrollable content */}
-      <main className="flex-1 overflow-y-auto" style={{ padding: "0 48px 40px" }}>
-        <div className="flex flex-col" style={{ maxWidth: 960, gap: 40 }}>
+      <main className="flex-1 overflow-y-auto" style={{ padding: "16px 48px 40px" }}>
+        <div className="flex flex-col" style={{ maxWidth: 960, gap: 16 }}>
           {/* Header */}
-          <div className="flex items-start" style={{ gap: 28 }}>
+          <div className="flex items-center" style={{ gap: 24 }}>
             <OaiProgressRing percent={enrollment.progressPercent} size={80} />
             <div className="flex flex-col" style={{ gap: 10 }}>
               <h1 className="oai-heading-lg" style={{ margin: 0 }}>{enrollment.title}</h1>
@@ -761,13 +754,13 @@ function MainPanel({
           )}
 
           {/* Skills | Daily Goals + Weekly Activity */}
-          <div style={{ display: "flex", gap: 28, alignItems: "stretch" }}>
+          <div style={{ display: "flex", gap: 16, alignItems: "stretch" }}>
             <OaiSkillProgress skills={skills} />
             <div
               style={{
                 display: "flex",
                 flexDirection: "column",
-                gap: 28,
+                gap: 16,
                 flexShrink: 0,
                 alignSelf: "stretch",
                 minWidth: 280,
