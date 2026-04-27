@@ -19,9 +19,6 @@ import {
   openAIDailyGoals,
   openAIDailyGoalsFtux,
   openAIDailyGoalsComplete,
-  openAISkills,
-  openAISkillsFtux,
-  openAISkillsComplete,
   openAIWeeklyActivity,
   openAIWeeklyActivityFtux,
   openAIWeeklyActivityComplete,
@@ -59,7 +56,6 @@ export default function App() {
 
   const myLearningEnrollments = demoState === "ftux" ? openAIEnrollmentsFtux : demoState === "complete" ? openAIEnrollmentsComplete : openAIEnrollments;
   const myLearningDailyGoals = demoState === "ftux" ? openAIDailyGoalsFtux : demoState === "complete" ? openAIDailyGoalsComplete : openAIDailyGoals;
-  const myLearningSkills = demoState === "ftux" ? openAISkillsFtux : demoState === "complete" ? openAISkillsComplete : openAISkills;
   const myLearningWeekly = demoState === "ftux" ? openAIWeeklyActivityFtux : demoState === "complete" ? openAIWeeklyActivityComplete : openAIWeeklyActivity;
   const myLearningCertificates = demoState === "ftux" ? openAICertificatesFtux : demoState === "complete" ? openAICertificatesComplete : openAICertificates;
 
@@ -87,7 +83,6 @@ export default function App() {
       <MyLearningFullScreen
         enrollments={myLearningEnrollments}
         dailyGoals={myLearningDailyGoals}
-        skills={myLearningSkills}
         weeklyActivity={myLearningWeekly}
         certificates={myLearningCertificates}
         initialCourseId={selectedCourseId}

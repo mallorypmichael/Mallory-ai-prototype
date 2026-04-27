@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { OpenAIEnrollment, OpenAIDailyGoal, OpenAIModuleItem, OpenAISkill, OpenAIWeeklyActivity, OpenAICertificate } from "../../data/mockData";
+import type { OpenAIEnrollment, OpenAIDailyGoal, OpenAIModuleItem, OpenAIWeeklyActivity, OpenAICertificate } from "../../data/mockData";
 import { getFirstIncompleteCourse, isFirstIncompleteCourse, isNotStartedCourseLocked } from "../../lib/openAILearningPath";
 
 /* ── ChatGPT Logo (reused from ChatGPTPage) ──── */
@@ -216,64 +216,6 @@ function DailyGoals({ goals }: { goals: OpenAIDailyGoal[] }) {
   );
 }
 
-
-/* ── Skill progress ─────────────────────────── */
-
-function OaiSkillProgress({ skills }: { skills: OpenAISkill[] }) {
-  const allZero = skills.every((s) => s.current === 0);
-  return (
-    <div
-      className="oai-card"
-      style={{ padding: "24px 28px", flex: 1, minWidth: 0, minHeight: 0, alignSelf: "stretch" }}
-    >
-      <h3 className="oai-heading-sm" style={{ marginTop: 0, marginBottom: 20 }}>Skills</h3>
-      {allZero ? (
-        <div className="flex flex-col" style={{ gap: 12 }}>
-          <span className="oai-body" style={{ color: "var(--oai-text-secondary)" }}>
-            You'll track your skill progress here once you start learning.
-          </span>
-          <div className="flex flex-col" style={{ gap: 8 }}>
-            {skills.map((s) => (
-              <span key={s.id} className="oai-body-sm" style={{ color: "var(--oai-text-tertiary)" }}>
-                {s.label}
-              </span>
-            ))}
-          </div>
-        </div>
-      ) : (
-        <div className="flex flex-col" style={{ gap: 16 }}>
-          {skills.map((s) => {
-            const pct = s.total > 0 ? Math.min(100, Math.round((s.current / s.total) * 100)) : 0;
-            const complete = s.current >= s.total;
-            return (
-              <div key={s.id} className="oai-skill-row">
-                <div className="oai-skill-row-header">
-                  <span className="oai-body" style={{ minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                    {s.label}
-                  </span>
-                  <span className="oai-skill-row-meta">
-                    {complete ? (
-                      <span className="oai-skill-complete-icon">
-                        <span className="material-symbols-rounded" style={{ fontSize: 12 }}>check</span>
-                      </span>
-                    ) : (
-                      <span className="oai-label" style={{ color: "var(--oai-text-secondary)" }}>
-                        {s.current}/{s.total}
-                      </span>
-                    )}
-                  </span>
-                </div>
-                <div className="oai-skill-bar-track">
-                  <div className="oai-skill-bar-fill" style={{ width: `${pct}%` }} />
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
-    </div>
-  );
-}
 
 /* ── Weekly activity ────────────────────────── */
 
@@ -650,7 +592,6 @@ function MainPanel({
   enrollment,
   enrollments,
   goals,
-  skills,
   weeklyActivity,
   certificates,
   onResume,
@@ -660,7 +601,6 @@ function MainPanel({
   enrollment: OpenAIEnrollment;
   enrollments: OpenAIEnrollment[];
   goals: OpenAIDailyGoal[];
-  skills: OpenAISkill[];
   weeklyActivity: OpenAIWeeklyActivity;
   certificates: OpenAICertificate[];
   onResume: (id: string) => void;
@@ -807,7 +747,6 @@ function MainPanel({
 interface MyLearningFullScreenProps {
   enrollments: OpenAIEnrollment[];
   dailyGoals: OpenAIDailyGoal[];
-  skills: OpenAISkill[];
   weeklyActivity: OpenAIWeeklyActivity;
   certificates: OpenAICertificate[];
   initialCourseId?: string;
@@ -819,7 +758,6 @@ interface MyLearningFullScreenProps {
 export function MyLearningFullScreen({
   enrollments,
   dailyGoals,
-  skills,
   weeklyActivity,
   certificates,
   initialCourseId,
@@ -882,7 +820,6 @@ export function MyLearningFullScreen({
         enrollment={selected}
         enrollments={enrollments}
         goals={dailyGoals}
-        skills={skills}
         weeklyActivity={weeklyActivity}
         certificates={certificates}
         onResume={() => setViewMode("item")}
