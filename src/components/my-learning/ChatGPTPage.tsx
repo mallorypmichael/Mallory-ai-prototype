@@ -12,10 +12,12 @@ function ChatGPTLogo({ size = 20 }: { size?: number }) {
   );
 }
 
+type DemoState = "default" | "ftux" | "complete";
+
 interface ChatGPTPageProps {
   enrollments: OpenAIEnrollment[];
-  firstTimeLearnerView: boolean;
-  onFirstTimeLearnerViewChange: (value: boolean) => void;
+  demoState: DemoState;
+  onDemoStateChange: (value: DemoState) => void;
   onBack: () => void;
   onExpandCourse: (id: string) => void;
   onResumeCourse: (id: string) => void;
@@ -23,8 +25,8 @@ interface ChatGPTPageProps {
 
 export function ChatGPTPage({
   enrollments,
-  firstTimeLearnerView,
-  onFirstTimeLearnerViewChange,
+  demoState,
+  onDemoStateChange,
   onBack,
   onExpandCourse,
   onResumeCourse,
@@ -65,24 +67,27 @@ export function ChatGPTPage({
             </span>
           </button>
           <div className="chatgpt-topbar-actions" style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <button
-              type="button"
-              role="switch"
-              aria-checked={firstTimeLearnerView}
-              onClick={() => onFirstTimeLearnerViewChange(!firstTimeLearnerView)}
-              className="oai-body-sm"
-              style={{
-                padding: "8px 12px",
-                border: "1px solid var(--oai-border)",
-                borderRadius: "var(--oai-radius-sm)",
-                background: firstTimeLearnerView ? "var(--oai-bg-tertiary)" : "transparent",
-                color: "var(--oai-text-primary)",
-                cursor: "pointer",
-                fontFamily: "var(--oai-font)",
-              }}
-            >
-              First-time learner view
-            </button>
+            <div style={{ display: "flex", border: "1px solid var(--oai-border)", borderRadius: "var(--oai-radius-sm)", overflow: "hidden" }}>
+              {(["default", "ftux", "complete"] as DemoState[]).map((s) => (
+                <button
+                  key={s}
+                  type="button"
+                  onClick={() => onDemoStateChange(s)}
+                  className="oai-body-sm"
+                  style={{
+                    padding: "6px 12px",
+                    border: "none",
+                    background: demoState === s ? "var(--oai-bg-tertiary)" : "transparent",
+                    color: "var(--oai-text-primary)",
+                    cursor: "pointer",
+                    fontFamily: "var(--oai-font)",
+                    borderRight: s !== "complete" ? "1px solid var(--oai-border)" : "none",
+                  }}
+                >
+                  {s === "default" ? "In progress" : s === "ftux" ? "First-time" : "Complete"}
+                </button>
+              ))}
+            </div>
             <button
               onClick={onBack}
               className="oai-coursera-btn"
@@ -120,9 +125,11 @@ export function ChatGPTPage({
               </div>
               <div className="chatgpt-assistant-content">
                 <p className="chatgpt-assistant-text" style={{ margin: 0 }}>
-                  {firstTimeLearnerView
+                  {demoState === "ftux"
                     ? "Here's how to get started with your OpenAI Certified program"
-                    : "Here's where you left off in your OpenAI Certified program"}
+                    : demoState === "complete"
+                      ? "Congratulations on completing your OpenAI Certified program!"
+                      : "Here's where you left off in your OpenAI Certified program"}
                 </p>
                 <MyLearningLight
                   enrollments={enrollments}

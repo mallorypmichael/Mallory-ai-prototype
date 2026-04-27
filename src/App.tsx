@@ -15,14 +15,19 @@ import {
   recentCertificates,
   openAIEnrollments,
   openAIEnrollmentsFtux,
+  openAIEnrollmentsComplete,
   openAIDailyGoals,
   openAIDailyGoalsFtux,
+  openAIDailyGoalsComplete,
   openAISkills,
   openAISkillsFtux,
+  openAISkillsComplete,
   openAIWeeklyActivity,
   openAIWeeklyActivityFtux,
+  openAIWeeklyActivityComplete,
   openAICertificates,
   openAICertificatesFtux,
+  openAICertificatesComplete,
 } from "./data/mockData";
 
 type AppView = "dashboard" | "chatgpt" | "fullCourse";
@@ -49,13 +54,14 @@ export default function App() {
   const [dashboardTab, setDashboardTab] = useState<DashboardTabId>("overview");
   const [selectedCourseId, setSelectedCourseId] = useState<string | undefined>();
   const [initialViewMode, setInitialViewMode] = useState<"overview" | "item" | "xdp">("overview");
-  const [firstTimeLearnerView, setFirstTimeLearnerView] = useState(false);
+  type DemoState = "default" | "ftux" | "complete";
+  const [demoState, setDemoState] = useState<DemoState>("default");
 
-  const myLearningEnrollments = firstTimeLearnerView ? openAIEnrollmentsFtux : openAIEnrollments;
-  const myLearningDailyGoals = firstTimeLearnerView ? openAIDailyGoalsFtux : openAIDailyGoals;
-  const myLearningSkills = firstTimeLearnerView ? openAISkillsFtux : openAISkills;
-  const myLearningWeekly = firstTimeLearnerView ? openAIWeeklyActivityFtux : openAIWeeklyActivity;
-  const myLearningCertificates = firstTimeLearnerView ? openAICertificatesFtux : openAICertificates;
+  const myLearningEnrollments = demoState === "ftux" ? openAIEnrollmentsFtux : demoState === "complete" ? openAIEnrollmentsComplete : openAIEnrollments;
+  const myLearningDailyGoals = demoState === "ftux" ? openAIDailyGoalsFtux : demoState === "complete" ? openAIDailyGoalsComplete : openAIDailyGoals;
+  const myLearningSkills = demoState === "ftux" ? openAISkillsFtux : demoState === "complete" ? openAISkillsComplete : openAISkills;
+  const myLearningWeekly = demoState === "ftux" ? openAIWeeklyActivityFtux : demoState === "complete" ? openAIWeeklyActivityComplete : openAIWeeklyActivity;
+  const myLearningCertificates = demoState === "ftux" ? openAICertificatesFtux : demoState === "complete" ? openAICertificatesComplete : openAICertificates;
 
   function goToFullCourse(courseId: string, mode: "overview" | "item" | "xdp" = "overview") {
     setSelectedCourseId(courseId);
@@ -67,8 +73,8 @@ export default function App() {
     return (
       <ChatGPTPage
         enrollments={myLearningEnrollments}
-        firstTimeLearnerView={firstTimeLearnerView}
-        onFirstTimeLearnerViewChange={setFirstTimeLearnerView}
+        demoState={demoState}
+        onDemoStateChange={setDemoState}
         onBack={() => setView("dashboard")}
         onExpandCourse={(id) => goToFullCourse(id, "xdp")}
         onResumeCourse={(id) => goToFullCourse(id, "item")}

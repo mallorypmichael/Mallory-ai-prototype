@@ -753,23 +753,10 @@ function MainPanel({
             </div>
           )}
 
-          {/* Skills | Daily Goals + Weekly Activity */}
+          {/* Daily Goals + Weekly Activity */}
           <div style={{ display: "flex", gap: 16, alignItems: "stretch" }}>
-            <OaiSkillProgress skills={skills} />
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: 16,
-                flexShrink: 0,
-                alignSelf: "stretch",
-                minWidth: 280,
-                width: "min(100%, 360px)",
-              }}
-            >
-              <DailyGoals goals={goals} />
-              <OaiWeeklyActivityCard activity={weeklyActivity} />
-            </div>
+            <DailyGoals goals={goals} />
+            <OaiWeeklyActivityCard activity={weeklyActivity} />
           </div>
 
           {/* Certifications earned */}

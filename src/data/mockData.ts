@@ -486,3 +486,59 @@ export const openAIWeeklyActivityFtux: OpenAIWeeklyActivity = {
   itemsCompleted: 0,
   minutesLearned: 0,
 };
+
+/* ───────────────────────────────────────────────
+ * OpenAI Certified — All-complete (demo) mocks
+ * ─────────────────────────────────────────────── */
+
+function enrollmentCompleteAll(e: OpenAIEnrollment): OpenAIEnrollment {
+  const lastMod = e.modules[e.modules.length - 1];
+  const lastItem = lastMod?.items[lastMod.items.length - 1];
+  return {
+    ...e,
+    status: "Complete",
+    progressPercent: 100,
+    modules: e.modules.map((m) => ({
+      ...m,
+      items: m.items.map((it) => ({ ...it, completed: true })),
+    })),
+    currentModuleId: lastMod?.id ?? e.currentModuleId,
+    currentItemId: lastItem?.id ?? e.currentItemId,
+    currentItemTitle: lastItem?.title ?? e.currentItemTitle,
+    lastAccessedAt: "2026-04-07",
+  };
+}
+
+export const openAIEnrollmentsComplete: OpenAIEnrollment[] = openAIEnrollments.map(enrollmentCompleteAll);
+
+export const openAICertificatesComplete: OpenAICertificate[] = openAIEnrollmentsComplete.map((e) => ({
+  id: `cert-${e.id}`,
+  courseTitle: e.title,
+  earnedAt: e.lastAccessedAt,
+  ...(e.brandSurfaceTint ? { cardBackground: e.brandSurfaceTint } : {}),
+}));
+
+export const openAIDailyGoalsComplete: OpenAIDailyGoal[] = openAIDailyGoals.map((g) => ({
+  ...g,
+  current: g.target,
+}));
+
+export const openAISkillsComplete: OpenAISkill[] = openAISkills.map((s) => ({
+  ...s,
+  current: s.total,
+}));
+
+export const openAIWeeklyActivityComplete: OpenAIWeeklyActivity = {
+  days: [
+    { label: "Mo", state: "done" },
+    { label: "Tu", state: "done" },
+    { label: "We", state: "done" },
+    { label: "Th", state: "done" },
+    { label: "Fr", state: "done" },
+    { label: "Sa", state: "done" },
+    { label: "Su", state: "done" },
+  ],
+  streakDays: 42,
+  itemsCompleted: 86,
+  minutesLearned: 420,
+};
